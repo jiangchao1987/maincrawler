@@ -104,4 +104,24 @@ public class RomAppDao {
             log.error(e.getMessage());
         }
     }
+    
+    public static void updateFileName(String filename) {
+        try {
+            Connection connection = Database.getConnection();
+            PreparedStatement ps = connection.prepareStatement("update tb_app set filename = ? where filename like ?");
+
+            log.info("update filename " + filename);
+            
+            ps.setString(1, null);
+            ps.setString(2, "%" + filename);
+            ps.executeUpdate();
+
+            ps.close();
+            connection.close();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+    }
 }
