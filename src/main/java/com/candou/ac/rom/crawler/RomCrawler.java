@@ -357,7 +357,7 @@ public class RomCrawler {
         return size;
     }
 
-    private String getFitType(String htmlSource) {
+    public String getFitType(String htmlSource) {
         String fitType = null;
         
         HtmlCleaner cleaner = getCleaner();
