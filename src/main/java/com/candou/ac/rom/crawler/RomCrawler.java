@@ -33,17 +33,17 @@ public class RomCrawler {
     private final int retryNumber = 5;
     private static Logger log = Logger.getLogger(RomCrawler.class);
     private static String xpath = "//div[@class='rom_introduct']/h2/a";
-    private static String xpathAuthor = "//div[@id='tag_l']/table/tbody/tr[2]/td[1]";
-    private static String xpathFitType = "//div[@id='tag_l']/table/tbody/tr[2]/td[2]";
-    private static String xpathSize = "//div[@id='tag_l']/table/tbody/tr[3]/td[1]";
-    private static String xpathReleaseDate = "//div[@id='tag_l']/table/tbody/tr[3]/td[2]";
-    private static String xpathRomType = "//div[@id='tag_l']/table/tbody/tr[4]/td[1]";
-    private static String xpathStar = "//div[@id='tag_l']/table/tbody/tr[4]/td[2]/span[@class='star']/b[@class='xing_7']";
-    private static String xpathDescription = "//div[@id='casl']";
-    private static String xpathIconUrl = "//div[@id='tag_l']/table/tbody/tr[1]/td[1]/img[@class='img_tu_rom']";
-    private static String xpathPhotos = "//div[@id='screen']/img";
+    private static String xpathAuthor = "//div[@class='rom_de_jie']/ul/li[2]/span";
+    private static String xpathFitType = "//div[@class='rom_de_jie']/ul/li[1]";
+    private static String xpathSize = "//div[@class='rom_de_jie']/ul/li[3]/span";
+    private static String xpathReleaseDate = "//div[@class='rom_de_jie']/ul/li[4]/span";
+    private static String xpathRomType = "//div[@class='rom_de_jie']/ul/li[5]";
+    private static String xpathStar = "//span[@class='star_hui fl']/b[@class='star_7']";
+    private static String xpathDescription = "//div[@class='jieshao_normal']";
+    private static String xpathIconUrl = "//div[@class='rom_picture']/img";
+    private static String xpathPhotos = "//div[@class='container_hover']/div[@class='pics'][*]/a/img";
     private static String xpathDownloadUrl = "//div[@id='tag_l']/table/tbody/tr[2]/td[3]/a";
-    private static String xpathCategory = "//div[@id='tag_l']/div[@class='fl']/a[3]";
+    private static String xpathCategory = "//div[@class='rom_head']/span[1]/a[3]";
 
     public void start() {
         int page = 1;
@@ -117,7 +117,7 @@ public class RomCrawler {
         return app;
     }
     
-    private Object[] getCategoryIdAndName(String htmlSource) {
+    public Object[] getCategoryIdAndName(String htmlSource) {
         Object[] categoryIdAndName = new Object[2];
         
         HtmlCleaner cleaner = getCleaner();
@@ -169,7 +169,7 @@ public class RomCrawler {
         return "http://www.shendu.com".concat(downloadUrl);
     }
 
-    private List<RomPhoto> getPhotos(String htmlSource, int id) {
+    public List<RomPhoto> getPhotos(String htmlSource, int id) {
         List<RomPhoto> photos = new ArrayList<RomPhoto>();
 
         HtmlCleaner cleaner = getCleaner();
@@ -200,7 +200,7 @@ public class RomCrawler {
         return photos;
     }
 
-    private String getIconUrl(String htmlSource) {
+    public String getIconUrl(String htmlSource) {
         String iconUrl = null;
         
         HtmlCleaner cleaner = getCleaner();
@@ -225,7 +225,7 @@ public class RomCrawler {
         return iconUrl;
     }
 
-    private String getDescription(String htmlSource) {
+    public String getDescription(String htmlSource) {
         String description = null;
         
         HtmlCleaner cleaner = getCleaner();
@@ -250,7 +250,7 @@ public class RomCrawler {
         return description;
     }
 
-    private String getRomType(String htmlSource) {
+    public String getRomType(String htmlSource) {
         String romType = null;
         
         HtmlCleaner cleaner = getCleaner();
@@ -295,7 +295,7 @@ public class RomCrawler {
                 TagNode tNode = (TagNode) nodes[index];
 
                 String starStr = tNode.getAttributeByName("class").trim();
-                starStr = starStr.replace("xing_", "");
+                starStr = starStr.replace("star_", "");
                 size = Float.parseFloat(starStr);
             }
         }
@@ -303,7 +303,7 @@ public class RomCrawler {
         return size;
     }
 
-    private String getReleaseDate(String htmlSource) {
+    public String getReleaseDate(String htmlSource) {
         String releaseDate = null;
         
         HtmlCleaner cleaner = getCleaner();
@@ -329,7 +329,7 @@ public class RomCrawler {
         return releaseDate;
     }
 
-    private float getSize(String htmlSource) {
+    public float getSize(String htmlSource) {
         float size = 0.0f;
         
         HtmlCleaner cleaner = getCleaner();
@@ -383,7 +383,7 @@ public class RomCrawler {
         return fitType;
     }
 
-    private String getAuthor(String htmlSource) {
+    public String getAuthor(String htmlSource) {
         String author = null;
         
         HtmlCleaner cleaner = getCleaner();
