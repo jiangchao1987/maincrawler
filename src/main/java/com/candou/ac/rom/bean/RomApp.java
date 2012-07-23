@@ -20,6 +20,7 @@ public class RomApp {
     private String fileName;
     private int categoryId;
     private String categoryName;
+    private String company;
 
     public int getAppId() {
         return appId;
@@ -148,13 +149,25 @@ public class RomApp {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
+    
+    public String getCompany() {
+		return company;
+	}
 
-    @Override
-    public String toString() {
-        return "RomApp [appId=" + appId + ", name=" + name + ", author=" + author + ", fitType=" + fitType + ", size="
-                + size + ", releaseDate=" + releaseDate + ", romType=" + romType + ", star=" + star + ", description="
-                + description + ", iconUrl=" + iconUrl + ", photos=" + photos + ", url=" + url + ", downloadUrl="
-                + downloadUrl + ", fileName=" + fileName + ", categoryId=" + categoryId + ", categoryName="
-                + categoryName + "]";
-    }
+	public void setCompany(String company) {
+		this.company = company;
+	}
+
+	@Override
+	public String toString() {
+		return "RomApp [appId=" + appId + ", name=" + name + ", author="
+				+ author + ", fitType=" + fitType + ", size=" + size
+				+ ", releaseDate=" + releaseDate + ", romType=" + romType
+				+ ", star=" + star + ", description=" + description
+				+ ", iconUrl=" + iconUrl + ", photos=" + photos + ", url="
+				+ url + ", downloadUrl=" + downloadUrl + ", fileName="
+				+ fileName + ", categoryId=" + categoryId + ", categoryName="
+				+ categoryName + ", company=" + company + "]";
+	}
+
 }

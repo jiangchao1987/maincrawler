@@ -42,8 +42,9 @@ public class RomCrawler {
     private static String xpathDescription = "//div[@class='jieshao_normal']";
     private static String xpathIconUrl = "//div[@class='rom_picture']/img";
     private static String xpathPhotos = "//div[@class='container_hover']/div[@class='pics'][*]/a/img";
-    private static String xpathDownloadUrl = "//div[@id='tag_l']/table/tbody/tr[2]/td[3]/a";
-    private static String xpathCategory = "//div[@class='rom_head']/span[1]/a[3]";
+    private static String xpathDownloadUrl = "//div[@class='rom_button']/a";
+    private static String xpathCategory = "//div[@class='rom_head']/span[1]/a[4]";
+    private static String xpathCompany = "//div[@class='rom_head']/span[1]/a[3]";
 
     public void start() {
         int page = 1;
@@ -73,6 +74,10 @@ public class RomCrawler {
                 }
             }
             
+            for (RomApp app : apps) {
+            	System.out.println(app);
+            }
+            
             RomAppDao.addBatchApps(apps);
             for (RomApp app : apps) {
                 photos.addAll(app.getPhotos());
@@ -85,6 +90,11 @@ public class RomCrawler {
 
     private RomApp getApp(RomJob job) {
         RomApp app = new RomApp();
+        
+        // whether exists
+        if (RomAppDao.exists(job.getJobId())) {
+        	return null;
+        }
 
         String htmlSource = getHtmlContent(job.getUrl());
         if (htmlSource == null) {
@@ -106,6 +116,7 @@ public class RomCrawler {
         app.setDownloadUrl(getRedirectDownloadURL(getDownloadUrl(htmlSource)));
         app.setCategoryId((Integer) getCategoryIdAndName(htmlSource)[0]);
         app.setCategoryName((String) getCategoryIdAndName(htmlSource)[1]);
+        app.setCompany(getCompany(htmlSource));
         
         // download
         String localIconUrl = RomImageDownloader.downloader(app.getIconUrl());
@@ -115,6 +126,31 @@ public class RomCrawler {
         app.setPhotos(localPhotos);
         
         return app;
+    }
+    
+    public String getCompany(String htmlSource) {
+    	String company = null;
+        
+        HtmlCleaner cleaner = getCleaner();
+        TagNode node = cleaner.clean(htmlSource);
+        Object[] nodes = null;
+
+        try {
+            nodes = node.evaluateXPath(xpathCompany);
+        }
+        catch (XPatherException e) {
+            e.printStackTrace();
+        }
+        
+        if (nodes != null && nodes.length > 0) {
+            for (int index = 0; index < nodes.length; index++) {
+                TagNode tNode = (TagNode) nodes[index];
+
+                company = tNode.getText().toString().trim();
+            }
+        }
+        
+        return company;
     }
     
     public Object[] getCategoryIdAndName(String htmlSource) {
@@ -136,7 +172,13 @@ public class RomCrawler {
                 TagNode tNode = (TagNode) nodes[index];
 
                 String categoryUrl = tNode.getAttributeByName("href").trim();
-                categoryIdAndName[0] = Integer.parseInt(categoryUrl.substring(categoryUrl.indexOf("cid-") + 4, categoryUrl.indexOf("-page")));
+                
+                int categoryId = 0;
+                String temp = categoryUrl.substring(categoryUrl.indexOf("cid-") + 4, categoryUrl.indexOf("-page"));
+                if (!temp.trim().isEmpty()) {
+                	categoryId = Integer.parseInt(temp);
+                }
+                categoryIdAndName[0] = categoryId;
                 categoryIdAndName[1] = tNode.getText().toString().trim();
             }
         }
@@ -144,7 +186,7 @@ public class RomCrawler {
         return categoryIdAndName;
     }
     
-    private String getDownloadUrl(String htmlSource) {
+    public String getDownloadUrl(String htmlSource) {
         String downloadUrl = null;
         
         HtmlCleaner cleaner = getCleaner();

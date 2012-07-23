@@ -38,12 +38,10 @@ public class RomImageDownloader {
     }
 
     private static String getSaveDir(String url, String fileName) {
+    	url = url.replace("http://sr.61658.com", "");
         url = url.replace("http://www.shendu.com", "");
         url = url.replace(fileName, "");
         return url;
     }
 
-    public static void main(String[] args) {
-        System.out.println(downloader("http://www.shendu.com/upload/rom/img/thumb/a1/3f/1_0_1332239536.png"));
-    }
 }

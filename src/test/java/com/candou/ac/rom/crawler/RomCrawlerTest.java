@@ -18,7 +18,7 @@ public class RomCrawlerTest {
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         crawler = new RomCrawler();
-        htmlContent = crawler.getHtmlContent("http://www.shendu.com/android/rom-635.html");
+        htmlContent = crawler.getHtmlContent("http://www.shendu.com/android/rom-803.html");
     }
 
     @AfterClass
@@ -89,10 +89,26 @@ public class RomCrawlerTest {
     	}
     }
     
-    @Test
+    @Ignore
     public void testGetCategoryIdAndName() {
     	Object[] categoryIdAndNameObjects = crawler.getCategoryIdAndName(htmlContent);
     	System.out.println(categoryIdAndNameObjects[0] + "," + categoryIdAndNameObjects[1]);
+    }
+    
+    @Ignore
+    public void testGetDownloadUrl() {
+    	String downloadUrl = crawler.getDownloadUrl(htmlContent);
+    	System.out.println(downloadUrl);
+    }
+    
+    @Ignore
+    public void testGetRedirectDownloadURL() {
+        System.out.println(crawler.getRedirectDownloadURL("http://www.shendu.com/?c=download&a=index&source=rom&id=863"));
+    }
+    
+    @Test
+    public void testGetCompany() {
+    	System.out.println(crawler.getCompany(htmlContent));
     }
 
 }
