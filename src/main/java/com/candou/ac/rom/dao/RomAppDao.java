@@ -17,6 +17,52 @@ import com.candou.util.DateTimeUtil;
 public class RomAppDao {
     private static Logger log = Logger.getLogger(RomAppDao.class);
     
+    public static void updateDescription(RomApp app) {
+    	try {
+            Connection connection = Database.getConnection();
+            PreparedStatement ps = connection.prepareStatement("update tb_app set description = ? where app_id = ?");
+
+            log.info("RomApp [appId=" + app.getAppId() + ", description=" + app.getDescription() + "]");
+            
+            ps.setString(1, app.getDescription());
+            ps.setInt(2, app.getAppId());
+            ps.executeUpdate();
+
+            ps.close();
+            connection.close();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+	}
+    
+    public static List<RomApp> findAllApps() {
+        List<RomApp> apps = new ArrayList<RomApp>();
+        try {
+            Connection connection = Database.getConnection();
+            Statement st = connection.createStatement();
+            ResultSet resultSet = st.executeQuery("select app_id, url from tb_app");
+
+            while (resultSet.next()) {
+                RomApp app = new RomApp();
+                app.setAppId(resultSet.getInt("app_id"));
+                app.setUrl(resultSet.getString("url"));
+
+                apps.add(app);
+            }
+            resultSet.close();
+            st.close();
+            connection.close();
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+        return apps;
+    }
+    
     public static List<RomApp> findAvailableApps() {
     	List<RomApp> apps = new ArrayList<RomApp>();
         try {
@@ -174,5 +220,5 @@ public class RomAppDao {
             log.error(e.getMessage());
         }
     }
-    
+
 }
