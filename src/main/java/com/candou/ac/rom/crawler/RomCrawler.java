@@ -45,21 +45,29 @@ public class RomCrawler {
     private static String xpathDownloadUrl = "//div[@class='rom_button']/a";
     private static String xpathCategory = "//div[@class='rom_head']/span[1]/a[4]";
     private static String xpathCompany = "//div[@class='rom_head']/span[1]/a[3]";
+    private int counter = 0;
 
     public void start() {
-        int page = 1;
+        int page = 100;
 
         while (true) {
             List<RomPhoto> photos = new ArrayList<RomPhoto>();
             
-            String pageUrl = "http://www.shendu.com/android/rom-cid-0-page-" + page + "-order-time.html";
+            String pageUrl = "http://www.shendu.com/android/rom-cid-0-page-" + page++ + "-order-time.html";
 
             log.info(String.format("fetch [%s]", pageUrl));
 
             String htmlSource = getHtmlContent(pageUrl);
             if (htmlSource == null) {
+            	
+            	if (counter > retryNumber) {
+            		break;
+            	}
+            	
+            	counter++;
                 continue;
             }
+            counter = 0;
             
             List<RomJob> jobs = getJobs(htmlSource);
 
@@ -74,17 +82,12 @@ public class RomCrawler {
                 }
             }
             
-            for (RomApp app : apps) {
-            	System.out.println(app);
-            }
-            
             RomAppDao.addBatchApps(apps);
             for (RomApp app : apps) {
                 photos.addAll(app.getPhotos());
             }
             RomPhotoDao.addBatchPhotos(photos);
 
-            page++;
         }
     }
 
