@@ -1,224 +1,76 @@
 package com.candou.ac.rom.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.candou.ac.rom.bean.RomApp;
-import com.candou.db.Database;
 import com.candou.util.DateTimeUtil;
 
-public class RomAppDao {
-    private static Logger log = Logger.getLogger(RomAppDao.class);
-    
-    public static void updateDescription(RomApp app) {
-    	try {
-            Connection connection = Database.getConnection();
-            PreparedStatement ps = connection.prepareStatement("update tb_app set description = ? where app_id = ?");
+@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+public class RomAppDao extends JdbcDaoSupport {
+	private static Logger log = Logger.getLogger(RomAppDao.class);
 
-            log.info("RomApp [appId=" + app.getAppId() + ", description=" + app.getDescription() + "]");
-            
-            ps.setString(1, app.getDescription());
-            ps.setInt(2, app.getAppId());
-            ps.executeUpdate();
+	private static final String ROMAPP_DESCRIPTION_UPDATE_BY_APPID = "update tb_app set description = ? where app_id = ?";
+	private static final String ROMAPP_SELECT = "select app_id, url from tb_app";
+	private static final String ROMAPP_SELECT_BY_FILENAME_NOTNULL = "select app_id, download_url, filename, size from tb_app where !isnull(filename)";
+	private static final String ROMAPP_SELECT_BY_APPID = "select count(0) from tb_app where app_id = ?";
+	private static final String ROMAPP_INSERT = "insert ignore into tb_app (app_id, app_name, author, fit_type, size, release_date, rom_type, star, description, icon_url, url, download_url, category_id, category_name, company, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String ROMAPP_SELECT_BY_FILENAME_NULL = "select app_id, download_url from tb_app where isnull(filename)";
+	private static final String ROMAPP_UPDATE_BY_APPID = "update tb_app set filename = ?, updated_at = ? where app_id = ?";
+	private static final String ROMAPP_UPDATE_BY_FILENAME = "update tb_app set filename = ? where filename like ?";
 
-            ps.close();
-            connection.close();
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-        }
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public void updateDescription(RomApp app) {
+		getJdbcTemplate().update(ROMAPP_DESCRIPTION_UPDATE_BY_APPID, app.getDescription(), app.getAppId());
 	}
-    
-    public static List<RomApp> findAllApps() {
-        List<RomApp> apps = new ArrayList<RomApp>();
-        try {
-            Connection connection = Database.getConnection();
-            Statement st = connection.createStatement();
-            ResultSet resultSet = st.executeQuery("select app_id, url from tb_app");
 
-            while (resultSet.next()) {
-                RomApp app = new RomApp();
-                app.setAppId(resultSet.getInt("app_id"));
-                app.setUrl(resultSet.getString("url"));
-
-                apps.add(app);
-            }
-            resultSet.close();
-            st.close();
-            connection.close();
-
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-        }
-        return apps;
-    }
-    
-    public static List<RomApp> findAvailableApps() {
-    	List<RomApp> apps = new ArrayList<RomApp>();
-        try {
-            Connection connection = Database.getConnection();
-            Statement st = connection.createStatement();
-            ResultSet resultSet = st.executeQuery("select app_id, download_url, filename, size from tb_app where !isnull(filename)");
-
-            while (resultSet.next()) {
-                RomApp app = new RomApp();
-                app.setAppId(resultSet.getInt("app_id"));
-                app.setDownloadUrl(resultSet.getString("download_url"));
-                app.setFileName(resultSet.getString("filename"));
-                app.setSize(resultSet.getFloat("size"));
-
-                apps.add(app);
-            }
-            resultSet.close();
-            st.close();
-            connection.close();
-
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-        }
-        return apps;
+	public List<RomApp> findAllApps() {
+		return getJdbcTemplate().query(ROMAPP_SELECT, ParameterizedBeanPropertyRowMapper.newInstance(RomApp.class));
 	}
-    
-    public static boolean exists(int appId) {
-		boolean flag = false;
-		try {
-			Connection connection  = Database.getConnection();
-			PreparedStatement ps = connection.prepareStatement("select app_id from tb_app where app_id = ?");
-			ps.setInt(1, appId);
 
-			ResultSet resultSet = ps.executeQuery();
-			if (resultSet.next()) {
-				flag = true;
-			}
-			resultSet.close();
-			ps.close();
-			connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			log.error(e.getMessage());
+	public List<RomApp> findAvailableApps() {
+		return getJdbcTemplate().query(ROMAPP_SELECT_BY_FILENAME_NOTNULL,
+				ParameterizedBeanPropertyRowMapper.newInstance(RomApp.class));
+	}
+
+	public boolean exists(int appId) {
+		int count = getJdbcTemplate().queryForInt(ROMAPP_SELECT_BY_APPID, appId);
+		return count > 0 ? true : false;
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public void addBatchApps(List<RomApp> apps) {
+		for (RomApp app : apps) {
+			String now = DateTimeUtil.nowDateTime();
+			log.info(app);
+			getJdbcTemplate().update(ROMAPP_INSERT, app.getAppId(), app.getAppName(), app.getAuthor(),
+					app.getFitType(), app.getSize(), app.getReleaseDate(), app.getRomType(), app.getStar(),
+					app.getDescription(), app.getIconUrl(), app.getUrl(), app.getDownloadUrl(), app.getCategoryId(),
+					app.getCategoryName(), app.getCompany(), now, now);
 		}
-		return flag;
 	}
 
-    public static void addBatchApps(List<RomApp> apps) {
-        try {
-            Connection connection = Database.getConnection();
-            PreparedStatement ps =
-                    connection
-                            .prepareStatement("insert ignore into tb_app (app_id, app_name, author, fit_type, size, release_date, rom_type, star, description, icon_url, url, download_url, category_id, category_name, company, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	public List<RomApp> findApps() {
+		return getJdbcTemplate().query(ROMAPP_SELECT_BY_FILENAME_NULL,
+				ParameterizedBeanPropertyRowMapper.newInstance(RomApp.class));
+	}
 
-            for (RomApp app : apps) {
-                String now = DateTimeUtil.nowDateTime();
-                log.info(app);
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public void updateFileName(RomApp app) {
+		String now = DateTimeUtil.nowDateTime();
+		log.info(String.format("RomApp [appId=%s, filename=%s]", app.getAppId(), app.getFilename()));
+		getJdbcTemplate().update(ROMAPP_UPDATE_BY_APPID, app.getFilename(), now, app.getAppId());
+	}
 
-                ps.setInt(1, app.getAppId());
-                ps.setString(2, app.getName());
-                ps.setString(3, app.getAuthor());
-                ps.setString(4, app.getFitType());
-                ps.setFloat(5, app.getSize());
-                ps.setString(6, app.getReleaseDate());
-                ps.setString(7, app.getRomType());
-                ps.setFloat(8, app.getStar());
-                ps.setString(9, app.getDescription());
-                ps.setString(10, app.getIconUrl());
-                ps.setString(11, app.getUrl());
-                ps.setString(12, app.getDownloadUrl());
-                ps.setInt(13, app.getCategoryId());
-                ps.setString(14, app.getCategoryName());
-                ps.setString(15, app.getCompany());
-                ps.setString(16, now);
-                ps.setString(17, now);
-
-                ps.executeUpdate();
-            }
-
-            ps.close();
-            connection.close();
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-        }
-    }
-
-    public static List<RomApp> findApps() {
-        List<RomApp> apps = new ArrayList<RomApp>();
-        try {
-            Connection connection = Database.getConnection();
-            Statement st = connection.createStatement();
-            ResultSet resultSet = st.executeQuery("select app_id, download_url from tb_app where isnull(filename)");
-
-            while (resultSet.next()) {
-                RomApp app = new RomApp();
-                app.setAppId(resultSet.getInt("app_id"));
-                app.setDownloadUrl(resultSet.getString("download_url"));
-
-                apps.add(app);
-            }
-            resultSet.close();
-            st.close();
-            connection.close();
-
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-        }
-        return apps;
-    }
-
-    public static void updateFileName(RomApp app) {
-        try {
-            Connection connection = Database.getConnection();
-            PreparedStatement ps = connection.prepareStatement("update tb_app set filename = ?, updated_at = ? where app_id = ?");
-
-            String now = DateTimeUtil.nowDateTime();
-            log.info("RomApp [appId=" + app.getAppId() + ", fileName=" + app.getFileName() + "]");
-            
-            ps.setString(1, app.getFileName());
-            ps.setString(2, now);
-            ps.setInt(3, app.getAppId());
-            ps.executeUpdate();
-
-            ps.close();
-            connection.close();
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-        }
-    }
-    
-    public static void updateFileName(String filename) {
-        try {
-            Connection connection = Database.getConnection();
-            PreparedStatement ps = connection.prepareStatement("update tb_app set filename = ? where filename like ?");
-
-            log.info("update filename " + filename);
-            
-            ps.setString(1, null);
-            ps.setString(2, "%" + filename);
-            ps.executeUpdate();
-
-            ps.close();
-            connection.close();
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-        }
-    }
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public void updateFileName(String filename) {
+		log.info(String.format("update filename %s", filename));
+		getJdbcTemplate().update(ROMAPP_UPDATE_BY_FILENAME, null, "%" + filename);
+	}
 
 }

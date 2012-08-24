@@ -22,8 +22,7 @@ import org.htmlcleaner.XPatherException;
 import com.candou.ac.rom.bean.RomApp;
 import com.candou.ac.rom.bean.RomJob;
 import com.candou.ac.rom.bean.RomPhoto;
-import com.candou.ac.rom.dao.RomAppDao;
-import com.candou.ac.rom.dao.RomPhotoDao;
+import com.candou.ac.rom.dao.DaoFactory;
 import com.candou.ac.rom.downloader.RomImageDownloader;
 import com.candou.util.BrowserUtil;
 import com.candou.util.URLFetchUtil;
@@ -82,11 +81,11 @@ public class RomCrawler {
                 }
             }
             
-            RomAppDao.addBatchApps(apps);
+            DaoFactory.getRomAppDao().addBatchApps(apps);
             for (RomApp app : apps) {
                 photos.addAll(app.getPhotos());
             }
-            RomPhotoDao.addBatchPhotos(photos);
+            DaoFactory.getRomPhotoDao().addBatchPhotos(photos);
 
         }
     }
@@ -95,7 +94,7 @@ public class RomCrawler {
         RomApp app = new RomApp();
         
         // whether exists
-        if (RomAppDao.exists(job.getJobId())) {
+        if (DaoFactory.getRomAppDao().exists(job.getJobId())) {
         	return null;
         }
 
@@ -105,7 +104,7 @@ public class RomCrawler {
         }
 
         app.setAppId(job.getJobId());
-        app.setName(job.getName());
+        app.setAppName(job.getName());
         app.setAuthor(getAuthor(htmlSource));
         app.setFitType(getFitType(htmlSource));
         app.setSize(getSize(htmlSource));

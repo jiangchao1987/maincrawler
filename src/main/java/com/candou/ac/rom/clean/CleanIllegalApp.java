@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.candou.ac.rom.bean.RomApp;
-import com.candou.ac.rom.dao.RomAppDao;
+import com.candou.ac.rom.dao.DaoFactory;
 import com.candou.conf.Configure;
 
 /**
@@ -21,22 +21,22 @@ public class CleanIllegalApp {
     	for (RomApp app : apps) {
     		if (app.getSize() != 0.0f && !isValid(app)) {	//如果size为0说明这个字段没有抓取到
     			// delete && update filename to null
-    			File illegalRom = new File(BASE_PATH + app.getFileName());
+    			File illegalRom = new File(BASE_PATH + app.getFilename());
     			if (illegalRom.exists() && illegalRom.delete()) {
-    				RomAppDao.updateFileName(app.getFileName());
+    				DaoFactory.getRomAppDao().updateFileName(app.getFilename());
     			}
     		}
     	}
     }
     
     private static List<RomApp> findApps() {
-    	List<RomApp> apps = RomAppDao.findAvailableApps();
+    	List<RomApp> apps = DaoFactory.getRomAppDao().findAvailableApps();
     	return apps;
     }
     
     private static boolean isValid(RomApp app) {
     	boolean result = false;
-    	String path = BASE_PATH + app.getFileName();
+    	String path = BASE_PATH + app.getFilename();
     	
     	File rom = new File(path);
     	if (rom.exists()) {
