@@ -21,7 +21,14 @@ public class RomImageDownloader {
         if (!targetFile.exists()) {
             int retry = 0;
             do {
-                FileUtil.remoteFile(url, targetFile);
+//            	boolean downloadDebug = false;
+//    			if (Configure.getProperty("download_debug_mode").equalsIgnoreCase("yes")) {
+//    				downloadDebug = true;
+//    			}
+//    			FileUtil.remoteFile(url, targetFile, downloadDebug,
+//    					Integer.parseInt(Configure.getProperty("max_thread_count")));
+            	FileUtil.remoteFile(url, targetFile);
+            	
             } while (++retry <= 5 && !targetFile.exists());
 
             if (targetFile.exists()) {

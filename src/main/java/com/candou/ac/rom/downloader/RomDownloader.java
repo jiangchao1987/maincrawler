@@ -24,7 +24,23 @@ public class RomDownloader {
 
 		int retry = 0;
 		do {
-			FileUtil.remoteFile(url, targetFile);
+			boolean downloadDebug = false;
+			if (Configure.getProperty("download_debug_mode").equalsIgnoreCase("yes")) {
+				downloadDebug = true;
+			}
+			
+			FileUtil.finished = false;
+			
+			FileUtil.remoteFile(url, targetFile, downloadDebug,
+					Integer.parseInt(Configure.getProperty("max_thread_count")));
+
+			while (!FileUtil.finished) {
+				try {
+					Thread.sleep(10 * 1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		} while (++retry <= 5 && !targetFile.exists());
 
 		if (targetFile.exists()) {
@@ -42,8 +58,8 @@ public class RomDownloader {
 	}
 
 	private static String getFileName(String url) {
-		return url.substring(url.lastIndexOf("/") + 1, url.length())
-				.replace("shendu", "candou").replace("ShenDu", "candou");
+		return url.substring(url.lastIndexOf("/") + 1, url.length()).replace("shendu", "candou")
+				.replace("ShenDu", "candou");
 	}
 
 }

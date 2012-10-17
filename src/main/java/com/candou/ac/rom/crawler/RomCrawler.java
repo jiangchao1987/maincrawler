@@ -47,7 +47,7 @@ public class RomCrawler {
     private int counter = 0;
 
     public void start() {
-        int page = 100;
+        int page = 0;
 
         while (true) {
             List<RomPhoto> photos = new ArrayList<RomPhoto>();
