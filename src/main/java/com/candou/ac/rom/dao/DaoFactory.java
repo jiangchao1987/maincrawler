@@ -14,8 +14,8 @@ public class DaoFactory {
 		ctx = new ClassPathXmlApplicationContext("com/candou/ac/rom/androidrom-jdbc.xml");
 	}
 
-	public static RomAppDao getRomAppDao() {
-		return (RomAppDao) ctx.getBean("romAppDao");
+	public static IRomAppDao getRomAppDao() {
+		return (IRomAppDao) ctx.getBean("romAppDao");
 	}
 
 	public static RomPhotoDao getRomPhotoDao() {

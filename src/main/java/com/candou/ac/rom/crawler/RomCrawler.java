@@ -78,14 +78,15 @@ public class RomCrawler {
                 RomApp app = getApp(job);
                 if (app != null) {
                     apps.add(app);
+                    log.info(app);
                 }
             }
             
-            DaoFactory.getRomAppDao().addBatchApps(apps);
-            for (RomApp app : apps) {
-                photos.addAll(app.getPhotos());
-            }
-            DaoFactory.getRomPhotoDao().addBatchPhotos(photos);
+//            DaoFactory.getRomAppDao().addBatchApps(apps);
+//            for (RomApp app : apps) {
+//                photos.addAll(app.getPhotos());
+//            }
+//            DaoFactory.getRomPhotoDao().addBatchPhotos(photos);
 
         }
     }
@@ -121,11 +122,11 @@ public class RomCrawler {
         app.setCompany(getCompany(htmlSource));
         
         // download
-        String localIconUrl = RomImageDownloader.downloader(app.getIconUrl());
-        app.setIconUrl(localIconUrl);
-        
-        List<RomPhoto> localPhotos = photoDownloader(app.getPhotos());
-        app.setPhotos(localPhotos);
+//        String localIconUrl = RomImageDownloader.downloader(app.getIconUrl());
+//        app.setIconUrl(localIconUrl);
+//        
+//        List<RomPhoto> localPhotos = photoDownloader(app.getPhotos());
+//        app.setPhotos(localPhotos);
         
         return app;
     }

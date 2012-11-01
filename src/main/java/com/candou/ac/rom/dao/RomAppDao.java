@@ -12,7 +12,7 @@ import com.candou.ac.rom.bean.RomApp;
 import com.candou.util.DateTimeUtil;
 
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-public class RomAppDao extends JdbcDaoSupport {
+public class RomAppDao extends JdbcDaoSupport implements IRomAppDao {
 	private static Logger log = Logger.getLogger(RomAppDao.class);
 
 	private static final String ROMAPP_DESCRIPTION_UPDATE_BY_APPID = "update tb_app set description = ? where app_id = ?";
@@ -24,25 +24,30 @@ public class RomAppDao extends JdbcDaoSupport {
 	private static final String ROMAPP_UPDATE_BY_APPID = "update tb_app set filename = ?, updated_at = ? where app_id = ?";
 	private static final String ROMAPP_UPDATE_BY_FILENAME = "update tb_app set filename = ? where filename like ?";
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void updateDescription(RomApp app) {
 		getJdbcTemplate().update(ROMAPP_DESCRIPTION_UPDATE_BY_APPID, app.getDescription(), app.getAppId());
 	}
 
+	@Override
 	public List<RomApp> findAllApps() {
 		return getJdbcTemplate().query(ROMAPP_SELECT, ParameterizedBeanPropertyRowMapper.newInstance(RomApp.class));
 	}
 
+	@Override
 	public List<RomApp> findAvailableApps() {
 		return getJdbcTemplate().query(ROMAPP_SELECT_BY_FILENAME_NOTNULL,
 				ParameterizedBeanPropertyRowMapper.newInstance(RomApp.class));
 	}
 
+	@Override
 	public boolean exists(int appId) {
 		int count = getJdbcTemplate().queryForInt(ROMAPP_SELECT_BY_APPID, appId);
 		return count > 0 ? true : false;
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void addBatchApps(List<RomApp> apps) {
 		for (RomApp app : apps) {
@@ -55,11 +60,13 @@ public class RomAppDao extends JdbcDaoSupport {
 		}
 	}
 
+	@Override
 	public List<RomApp> findApps() {
 		return getJdbcTemplate().query(ROMAPP_SELECT_BY_FILENAME_NULL,
 				ParameterizedBeanPropertyRowMapper.newInstance(RomApp.class));
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void updateFileName(RomApp app) {
 		String now = DateTimeUtil.nowDateTime();
@@ -67,6 +74,7 @@ public class RomAppDao extends JdbcDaoSupport {
 		getJdbcTemplate().update(ROMAPP_UPDATE_BY_APPID, app.getFilename(), now, app.getAppId());
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void updateFileName(String filename) {
 		log.info(String.format("update filename %s", filename));

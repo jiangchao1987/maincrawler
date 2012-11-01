@@ -11,11 +11,12 @@ import com.candou.ac.rom.bean.RomPhoto;
 import com.candou.util.DateTimeUtil;
 
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-public class RomPhotoDao extends JdbcDaoSupport {
+public class RomPhotoDao extends JdbcDaoSupport implements IRomPhotoDao {
 	private static Logger log = Logger.getLogger(RomPhotoDao.class);
 
 	private static final String ROMPHOTO_INSERT = "insert ignore into tb_photo (app_id, original_url, created_at, updated_at) VALUES (?, ?, ?, ?)";
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void addBatchPhotos(List<RomPhoto> photos) {
 		for (RomPhoto photo : photos) {
