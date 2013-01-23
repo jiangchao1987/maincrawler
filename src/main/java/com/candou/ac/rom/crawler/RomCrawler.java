@@ -38,7 +38,7 @@ public class RomCrawler {
     private static String xpathReleaseDate = "//div[@class='rom_de_jie']/ul/li[4]/span";
     private static String xpathRomType = "//div[@class='rom_de_jie']/ul/li[5]";
     private static String xpathStar = "//span[@class='star_hui fl']/b[@class='star_7']";
-    private static String xpathDescription = "//div[@class='jieshao_normal']";
+    private static String xpathDescription = "//div[@id='wenzi']";
     private static String xpathIconUrl = "//div[@class='rom_picture']/img";
     private static String xpathPhotos = "//div[@class='container_hover']/div[@class='pics'][*]/a/img";
     private static String xpathDownloadUrl = "//div[@class='rom_button']/a";
@@ -211,7 +211,7 @@ public class RomCrawler {
             }
         }
         
-        return "http://www.shendu.com".concat(downloadUrl);
+        return downloadUrl;
     }
 
     public List<RomPhoto> getPhotos(String htmlSource, int id) {
