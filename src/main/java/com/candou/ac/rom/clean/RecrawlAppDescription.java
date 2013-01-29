@@ -89,7 +89,7 @@ public class RecrawlAppDescription {
         String htmlSource = null;
 
         do {
-            htmlSource = URLFetchUtil.fetch(url);
+            htmlSource = URLFetchUtil.fetchGet(url);
             retryCounter++;
             if (retryCounter > 1) {
                 log.info("retry connection: " + url);

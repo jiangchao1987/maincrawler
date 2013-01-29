@@ -21,7 +21,7 @@ public class AppstaticsCrawler {
         String htmlSource = null;
         int retryCounter = 0;
         do {
-            htmlSource = URLFetchUtil.fetch(baseUrl);
+            htmlSource = URLFetchUtil.fetchGet(baseUrl);
             retryCounter++;
             if (retryCounter > 1) {
                 log.info("retry connection: " + baseUrl);

@@ -10,8 +10,16 @@ import org.apache.log4j.Logger;
 
 public class URLFetchUtil {
 	private static Logger logger = Logger.getLogger(URLFetchUtil.class);
+	
+	public static String fetchGet(String url) {
+		return fetch(url, "GET");
+	}
+	
+	public static String fetchPost(String url) {
+		return fetch(url, "POST");
+	}
 
-	public static String fetch(String url) {
+	public static String fetch(String url, String method) {
 		logger.info("Connection " + url);
 
 		String content = null;
@@ -21,7 +29,7 @@ public class URLFetchUtil {
 
 			connection.setConnectTimeout(30000);
 			connection.setReadTimeout(30000);
-			connection.setRequestMethod("GET");
+			connection.setRequestMethod(method);
 			connection.setRequestProperty("User-Agent", BrowserUtil.getRandomBrowserUserAgent());
 			connection.setRequestProperty("Accept-Language", "zh-cn, zh;q=0.75, en-us;q=0.50, en;q=0.25");
 
