@@ -11,9 +11,9 @@ import com.candou.ic.market.pp.bean.Job;
 import com.candou.ic.market.pp.dao.JobDao;
 import com.candou.util.URLFetchUtil;
 
-public class PPCrawler {
+public class FreeCrawler {
 	private final int retryNumber = 5;
-	private static Logger log = Logger.getLogger(PPCrawler.class);
+	private static Logger log = Logger.getLogger(FreeCrawler.class);
 	private String baseUrl = null;
 	public static int[] categoryIds = { 6000, 6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010, 6011, 6012,
 			6013, 6014, 6015, 6016, 6017, 6018, 6020, 6022, 6023, 7001, 7002, 7003, 7004, 7005, 7006, 7007, 7008, 7009,
@@ -110,7 +110,7 @@ public class PPCrawler {
 				String version = jsonObject2.getString("version");
 				int catid = jsonObject2.getInt("catid");
 				String releaseDate = jsonObject2.getString("updatetime");
-				float price = (float) (jsonObject2.getDouble("price") / 1000);
+				float price = (float) jsonObject2.getDouble("timeprice");
 
 				int index = 14;
 				for (int j = 0; j < categoryIds.length; j++) {

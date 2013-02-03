@@ -1,5 +1,7 @@
 package com.candou.ic.market.pp.crawler;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,13 +9,14 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.candou.db.Database;
 import com.candou.ic.market.pp.bean.Job;
 import com.candou.ic.market.pp.dao.JobDao;
 import com.candou.util.URLFetchUtil;
 
-public class PPCrawler {
+public class LimitedCrawler {
 	private final int retryNumber = 5;
-	private static Logger log = Logger.getLogger(PPCrawler.class);
+	private static Logger log = Logger.getLogger(LimitedCrawler.class);
 	private String baseUrl = null;
 	public static int[] categoryIds = { 6000, 6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010, 6011, 6012,
 			6013, 6014, 6015, 6016, 6017, 6018, 6020, 6022, 6023, 7001, 7002, 7003, 7004, 7005, 7006, 7007, 7008, 7009,
@@ -30,7 +33,7 @@ public class PPCrawler {
 			String htmlSource = null;
 			int retryCounter = 0;
 			for (int x = 0; x < sources.length; x++) {
-				for (int pn = 1; pn < 1000; pn++) {
+				for (int pn = 1; pn < 400; pn++) {
 					do {
 						baseUrl = String.format(sources[x], pn);
 						htmlSource = URLFetchUtil.fetchPost(baseUrl);
@@ -90,9 +93,38 @@ public class PPCrawler {
 		log.info(String.format("newJobs.size() : %d, matchedJobs.size(): %d", newJobs.size(), matchedJobs.size()));
 		JobDao.addBatchJobs(newJobs);
 		JobDao.batchUpdate(matchedJobs);
+		addBatchLimited(matchedJobs);
 		newJobs.clear();
 		matchedJobs.clear();
 	}
+	
+//	Create Table: CREATE TABLE `tb_limited` (
+//			  `limited_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+//			  `id` int(11) NOT NULL DEFAULT '0',
+//			  `is_changed` tinyint(3) unsigned NOT NULL DEFAULT '0',
+//			  `created_at` int(10) unsigned NOT NULL DEFAULT '0',
+//			  PRIMARY KEY (`limited_id`),
+//			  UNIQUE KEY `id_2` (`id`,`created_at`),
+//			  KEY `is_changed` (`is_changed`)
+//			) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+	public void addBatchLimited(List<Job> jobs) {
+        for (Job job : jobs) {
+        	try {
+                Connection connection = Database.getConnection();
+                PreparedStatement ps =
+                        connection
+                                .prepareStatement("insert ignore into tb_limited (id, created_at) values (?, UNIX_TIMESTAMP(DATE_FORMAT(NOW(),'%Y-%m-%d')))");
+                ps.setInt(1, job.getId());
+                ps.execute();
+
+                ps.close();
+                connection.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 	private List<Job> parse(String htmlSource) {
 		List<Job> jobs = new ArrayList<Job>();
@@ -110,7 +142,7 @@ public class PPCrawler {
 				String version = jsonObject2.getString("version");
 				int catid = jsonObject2.getInt("catid");
 				String releaseDate = jsonObject2.getString("updatetime");
-				float price = (float) (jsonObject2.getDouble("price") / 1000);
+				float price = 0.0f;
 
 				int index = 14;
 				for (int j = 0; j < categoryIds.length; j++) {

@@ -48,13 +48,13 @@ public class LookupParser {
 		Job job = new Job();
 		
 		//抓取iphone使用
-		if (!supportIphone(appNode)) {
-			return null;
-		}
-		//抓取ipad使用
-//		if (!supportIpad(appNode)) {
+//		if (!supportIphone(appNode)) {
 //			return null;
 //		}
+		//抓取ipad使用
+		if (!supportIpad(appNode)) {
+			return null;
+		}
 
 		job.setId(id);
 		job.setName(extraceName(appNode));

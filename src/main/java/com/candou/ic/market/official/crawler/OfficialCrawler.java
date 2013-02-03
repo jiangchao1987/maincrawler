@@ -18,21 +18,21 @@ public class OfficialCrawler {
 	private String baseUrl = null;
 	private final int retryNumber = 5;
 
-	private String[] rankAllUrls = { "https://itunes.apple.com/cn/rss/topfreeapplications/limit=300/json",
-			"http://itunes.apple.com/cn/rss/toppaidapplications/limit=300/json",
-			"http://itunes.apple.com/cn/rss/topgrossingapplications/limit=300/json" };
+	// private String[] rankAllUrls = { "https://itunes.apple.com/cn/rss/topfreeapplications/limit=300/json",
+	// "http://itunes.apple.com/cn/rss/toppaidapplications/limit=300/json",
+	// "http://itunes.apple.com/cn/rss/topgrossingapplications/limit=300/json" };
 
-	// private String[] rankAllUrls = { "http://itunes.apple.com/cn/rss/topfreeipadapplications/limit=300/json",
-	// "http://itunes.apple.com/cn/rss/toppaidipadapplications/limit=300/json",
-	// "http://itunes.apple.com/cn/rss/topgrossingipadapplications/limit=300/json" };
+	private String[] rankAllUrls = { "http://itunes.apple.com/cn/rss/topfreeipadapplications/limit=300/json",
+			"http://itunes.apple.com/cn/rss/toppaidipadapplications/limit=300/json",
+			"http://itunes.apple.com/cn/rss/topgrossingipadapplications/limit=300/json" };
 
-	private String[] rankCatlogUrls = { "http://itunes.apple.com/cn/rss/topfreeapplications/limit=300/genre=%d",
-			"http://itunes.apple.com/cn/rss/toppaidapplications/limit=300/genre=%d",
-			"http://itunes.apple.com/cn/rss/topgrossingapplications/limit=300/genre=%d" };
+	// private String[] rankCatlogUrls = { "http://itunes.apple.com/cn/rss/topfreeapplications/limit=300/genre=%d",
+	// "http://itunes.apple.com/cn/rss/toppaidapplications/limit=300/genre=%d",
+	// "http://itunes.apple.com/cn/rss/topgrossingapplications/limit=300/genre=%d" };
 
-	// private String[] rankCatlogUrls = { "http://itunes.apple.com/cn/rss/topfreeipadapplications/limit=300/genre=",
-	// "http://itunes.apple.com/cn/rss/toppaidipadapplications/limit=300/genre=",
-	// "http://itunes.apple.com/cn/rss/topgrossingipadapplications/limit=300/genre=" };
+	private String[] rankCatlogUrls = { "http://itunes.apple.com/cn/rss/topfreeipadapplications/limit=300/genre=%d",
+			"http://itunes.apple.com/cn/rss/toppaidipadapplications/limit=300/genre=%d",
+			"http://itunes.apple.com/cn/rss/topgrossingipadapplications/limit=300/genre=%d" };
 
 	// 无法区分iphone/ipad
 	private String[] rankLatestUrls = { "https://itunes.apple.com/cn/rss/newapplications/limit=300/genre=6014/json",
@@ -74,13 +74,13 @@ public class OfficialCrawler {
 
 			// if html source length equal zero
 			if (htmlSource == null || htmlSource.length() == 0) {
-				return;
+				continue;
 			}
 
 			List<Job> list = parse(htmlSource.trim());
 
 			if (list == null || list.isEmpty()) {
-				return;
+				continue;
 			}
 			exec(list);
 			// sleep 10 seconds
@@ -111,14 +111,14 @@ public class OfficialCrawler {
 
 				// if html source length equal zero
 				if (htmlSource == null || htmlSource.length() == 0) {
-					return;
+					continue;
 				}
 
 				htmlSource = htmlSource.replaceAll("﻿\\{", "\\{");
 				List<Job> list = parse(htmlSource.trim());
 
 				if (list == null || list.isEmpty()) {
-					return;
+					continue;
 				}
 				exec(list);
 				// sleep 10 seconds
@@ -149,14 +149,14 @@ public class OfficialCrawler {
 
 			// if html source length equal zero
 			if (htmlSource == null || htmlSource.length() == 0) {
-				return;
+				continue;
 			}
 
 			htmlSource = htmlSource.replaceAll("﻿\\{", "\\{");
 			List<Job> list = parse(htmlSource.trim());
 
 			if (list == null || list.isEmpty()) {
-				return;
+				continue;
 			}
 			exec(list);
 			// sleep 10 seconds
