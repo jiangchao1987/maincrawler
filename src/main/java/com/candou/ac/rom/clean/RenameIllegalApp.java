@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import com.candou.ac.rom.bean.RomApp;
+import com.candou.ac.rom.dao.AppDao;
 import com.candou.ac.rom.dao.DaoFactory;
 import com.candou.conf.Configure;
 
@@ -29,7 +30,8 @@ public class RenameIllegalApp {
     			if (renameFile(filename)) {
     				String newFilename = filename.replace("shendu", "candou").replace("ShenDu", "candou");
     				app.setFilename(newFilename);
-    				DaoFactory.getRomAppDao().updateFileName(app);
+//    				DaoFactory.getRomAppDao().updateFileName(app);
+    				AppDao.updateFileName(app);
     			}
     		}
     	}
@@ -49,8 +51,9 @@ public class RenameIllegalApp {
 	}
 	
 	private static List<RomApp> findApps() {
-    	List<RomApp> apps = DaoFactory.getRomAppDao().findAvailableApps();
-    	return apps;
+//    	List<RomApp> apps = DaoFactory.getRomAppDao().findAvailableApps();
+    	List<RomApp> apps = AppDao.findAvailableApps();
+		return apps;
     }
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.candou.ac.rom.bean.RomApp;
+import com.candou.ac.rom.dao.AppDao;
 import com.candou.ac.rom.dao.DaoFactory;
 import com.candou.conf.Configure;
 
@@ -23,14 +24,16 @@ public class CleanIllegalApp {
     			// delete && update filename to null
     			File illegalRom = new File(BASE_PATH + app.getFilename());
     			if (illegalRom.exists() && illegalRom.delete()) {
-    				DaoFactory.getRomAppDao().updateFileName(app.getFilename());
+//    				DaoFactory.getRomAppDao().updateFileName(app.getFilename());
+    				AppDao.updateFileName(app.getFilename());
     			}
     		}
     	}
     }
     
     private static List<RomApp> findApps() {
-    	List<RomApp> apps = DaoFactory.getRomAppDao().findAvailableApps();
+//    	List<RomApp> apps = DaoFactory.getRomAppDao().findAvailableApps();
+    	List<RomApp> apps = AppDao.findAvailableApps();
     	return apps;
     }
     

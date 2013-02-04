@@ -9,6 +9,7 @@ import org.htmlcleaner.TagNode;
 import org.htmlcleaner.XPatherException;
 
 import com.candou.ac.rom.bean.RomApp;
+import com.candou.ac.rom.dao.AppDao;
 import com.candou.ac.rom.dao.DaoFactory;
 import com.candou.util.URLFetchUtil;
 
@@ -36,11 +37,13 @@ public class RecrawlAppDescription {
 	}
 	
 	private static void updateDescription(RomApp app) {
-		DaoFactory.getRomAppDao().updateDescription(app);
+//		DaoFactory.getRomAppDao().updateDescription(app);
+		AppDao.updateDescription(app);
 	}
 
 	private static List<RomApp> findApps() {
-		List<RomApp> apps = DaoFactory.getRomAppDao().findAllApps();
+//		List<RomApp> apps = DaoFactory.getRomAppDao().findAllApps();
+		List<RomApp> apps = AppDao.findAllApps();
     	return apps;
 	}
 	
