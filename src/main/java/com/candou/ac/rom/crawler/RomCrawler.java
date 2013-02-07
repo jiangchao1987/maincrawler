@@ -395,13 +395,17 @@ public class RomCrawler {
         }
         
         if (nodes != null && nodes.length > 0) {
-            for (int index = 0; index < nodes.length; index++) {
-                TagNode tNode = (TagNode) nodes[index];
+            try {
+            	for (int index = 0; index < nodes.length; index++) {
+                    TagNode tNode = (TagNode) nodes[index];
 
-                String sizeStr = tNode.getText().toString().trim();
-                sizeStr = sizeStr.replace("ROM大小：", "");
-                sizeStr = sizeStr.replace("MB", "");
-                size = Float.parseFloat(sizeStr.trim());
+                    String sizeStr = tNode.getText().toString().trim();
+                    sizeStr = sizeStr.replace("ROM大小：", "");
+                    sizeStr = sizeStr.replace("MB", "");
+                    size = Float.parseFloat(sizeStr.trim());
+                }
+            } catch (Exception e) {
+            	e.printStackTrace();
             }
         }
         
@@ -460,7 +464,11 @@ public class RomCrawler {
         return author;
     }
     
-    public String getRedirectDownloadURL(String downloadURL) {
+    public static void main(String[] args) {
+    	System.out.println(getRedirectDownloadURL("http://www.shendu.com/?c=download&a=index&source=rom&id=387"));
+	}
+    
+    public static String getRedirectDownloadURL(String downloadURL) {
         String redirectDownloadURL = null;
         DefaultHttpClient httpclient = new DefaultHttpClient();
         HttpParams params = httpclient.getParams();
@@ -486,6 +494,7 @@ public class RomCrawler {
                 }
             }
         } catch (Exception e) {
+        	e.printStackTrace();
             log.info("failed to get redirectdownloadurl.");
         }
         return redirectDownloadURL;

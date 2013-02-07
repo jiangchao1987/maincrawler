@@ -1,14 +1,36 @@
 package com.candou.ac.rom.downloader;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
 import com.candou.conf.Configure;
 import com.candou.util.FileUtil;
+import com.candou.util.MD5Util;
 
 public class RomDownloader {
 	private static Logger log = Logger.getLogger(RomDownloader.class);
+	
+	public static String filemd5(String url) {
+		String filemd5 = null;
+    	String fileName = getFileName(url);
+		File dir = new File(Configure.getProperty("rom_path"), getSaveDir());
+		if (!dir.exists()) {
+			return null;
+		}
+
+		File targetFile = new File(dir, fileName);
+		if (targetFile.exists()) {
+			try {
+				filemd5 = MD5Util.getFileMD5(targetFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return filemd5;
+    }
 
 	public static String downloader(String url) {
 		String fileName = getFileName(url);

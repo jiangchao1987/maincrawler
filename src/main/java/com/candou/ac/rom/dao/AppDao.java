@@ -105,15 +105,16 @@ public class AppDao {
 		try {
 			Connection connection = Database.getConnection();
 			PreparedStatement ps = connection
-					.prepareStatement("update tb_app set filename = ?, updated_at = ? where app_id = ?");
+					.prepareStatement("update tb_app set filename = ?, filemd5 = ?, updated_at = ? where app_id = ?");
 
 			String now = DateTimeUtil.nowDateTime();
 			log.info("RomApp [appId=" + app.getAppId() + ", fileName="
-					+ app.getFilename() + "]");
+					+ app.getFilename() + ", filemd5=" + app.getFilemd5() + "]");
 
 			ps.setString(1, app.getFilename());
-			ps.setString(2, now);
-			ps.setInt(3, app.getAppId());
+			ps.setString(2, app.getFilemd5());
+			ps.setString(3, now);
+			ps.setInt(4, app.getAppId());
 			ps.executeUpdate();
 
 			ps.close();

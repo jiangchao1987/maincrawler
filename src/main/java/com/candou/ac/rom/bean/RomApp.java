@@ -21,6 +21,7 @@ public class RomApp {
 	private int categoryId;
 	private String categoryName;
 	private String company;
+	private String filemd5;
 
 	public void setAppId(int appId) {
 		this.appId = appId;
@@ -157,12 +158,26 @@ public class RomApp {
 	public void setCompany(String company) {
 		this.company = company;
 	}
+	
+	public String getFilemd5() {
+		return filemd5;
+	}
+
+	public void setFilemd5(String filemd5) {
+		this.filemd5 = filemd5;
+	}
 
 	@Override
 	public String toString() {
-		return "RomApp [appId=" + appId + ", appName=" + appName + ", author=" + author + ", fitType=" + fitType + ", size=" + size + ", releaseDate=" + releaseDate + ", romType=" + romType
-				+ ", star=" + star + ", description=" + description + ", iconUrl=" + iconUrl + ", photos=" + photos + ", url=" + url + ", downloadUrl=" + downloadUrl + ", filename=" + filename
-				+ ", categoryId=" + categoryId + ", categoryName=" + categoryName + ", company=" + company + "]";
+		return "RomApp [appId=" + appId + ", appName=" + appName + ", author="
+				+ author + ", fitType=" + fitType + ", size=" + size
+				+ ", releaseDate=" + releaseDate + ", romType=" + romType
+				+ ", star=" + star + ", description=" + description
+				+ ", iconUrl=" + iconUrl + ", photos=" + photos + ", url="
+				+ url + ", downloadUrl=" + downloadUrl + ", filename="
+				+ filename + ", categoryId=" + categoryId + ", categoryName="
+				+ categoryName + ", company=" + company + ", filemd5="
+				+ filemd5 + "]";
 	}
 
 }

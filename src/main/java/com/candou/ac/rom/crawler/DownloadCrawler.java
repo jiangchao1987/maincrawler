@@ -15,9 +15,11 @@ public class DownloadCrawler {
             String fileName = RomDownloader.downloader(app.getDownloadUrl());
             if (fileName != null) {
                 app.setFilename(fileName);
+                app.setFilemd5(RomDownloader.filemd5(app.getDownloadUrl()));
 //                DaoFactory.getRomAppDao().updateFileName(app);
                 AppDao.updateFileName(app);
             }
         }
     }
+    
 }
