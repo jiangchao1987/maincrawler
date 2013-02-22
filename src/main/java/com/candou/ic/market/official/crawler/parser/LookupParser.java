@@ -1,7 +1,5 @@
 package com.candou.ic.market.official.crawler.parser;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonProcessingException;
@@ -48,13 +46,13 @@ public class LookupParser {
 		Job job = new Job();
 		
 		//抓取iphone使用
-//		if (!supportIphone(appNode)) {
-//			return null;
-//		}
-		//抓取ipad使用
-		if (!supportIpad(appNode)) {
+		if (!supportIphone(appNode)) {
 			return null;
 		}
+		//抓取ipad使用
+//		if (!supportIpad(appNode)) {
+//			return null;
+//		}
 
 		job.setId(id);
 		job.setName(extraceName(appNode));
@@ -152,7 +150,7 @@ public class LookupParser {
 			}
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;

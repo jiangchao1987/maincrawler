@@ -8,7 +8,7 @@ import com.candou.ic.market.pp.crawler.LimitedCrawler;
 
 public class PPLimitedMain {
 
-	private static String[] limited = {"http://pppc.25pp.com/apple/soft?son_phone_typeid=2&a=timeFree&orderby=freeTime&catid=0&page=%d"};
+	private static String[] limited = {"http://pppc.25pp.com/apple/soft?son_phone_typeid=1&a=timeFree&orderby=freeTime&catid=0&page=%d"};
 
 	public static void main(String[] args) {
 		new LimitedCrawler().start(limited);
