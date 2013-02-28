@@ -89,7 +89,7 @@ public class PPCrawler {
 		}
 		log.info(String.format("newJobs.size() : %d, matchedJobs.size(): %d", newJobs.size(), matchedJobs.size()));
 		JobDao.addBatchJobs(newJobs);
-		JobDao.batchUpdate(matchedJobs);
+//		JobDao.batchUpdate(matchedJobs);
 		newJobs.clear();
 		matchedJobs.clear();
 	}

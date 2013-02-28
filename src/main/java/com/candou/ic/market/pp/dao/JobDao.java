@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.candou.db.Database;
 import com.candou.ic.market.pp.bean.Job;
+import com.candou.ic.market.pp.bean.Price;
 import com.candou.util.DateTimeUtil;
 
 public class JobDao {
@@ -117,6 +118,9 @@ public class JobDao {
 						currentPrice = 0f;
 						lastPrice = 0f;
 					}
+					
+					// 记录价格变化
+					TLPriceDao.addPrice(new Price(applicationId, currentPrice, lastPrice, priceTrend));
 
 					// 更新 tb_application 表价格信息
 					AppDao.updateAppPrice(applicationId, priceTrend, lastPrice, currentPrice);
