@@ -1,7 +1,7 @@
 main spider servers, contains android crawlers and iphone/ipad crawlers
 
 以下按照packagename区分
-ac -- android crawler
+ac(android crawler)
 	rom -- androidrom crawler, 来源http://www.shendu.com/
 ic(iphone/ipad crawler)
 	market -- 获取各个市场的iphone/ipad应用数据
