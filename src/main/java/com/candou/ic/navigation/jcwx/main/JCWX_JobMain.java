@@ -7,7 +7,7 @@ import com.candou.ic.navigation.jcwx.crawler.JCWX_JobCrawler;
 /**
  * 精彩微信 爬虫入口。
  *
- * @author jiangchao
+ * @author niuliwei
  */
 public class JCWX_JobMain {
 

@@ -12,6 +12,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.candou.ic.navigation.jcwx.bean.Category;
 import com.candou.ic.navigation.jcwx.bean.Job;
 import com.candou.ic.navigation.jcwx.dao.CategoryDao;
+import com.candou.ic.navigation.jcwx.dao.JobDao;
+import com.candou.util.DateTimeUtil;
 import com.candou.util.SeedUtil;
 import com.candou.util.TextUtil;
 import com.candou.util.URLFetchUtil;
@@ -19,7 +21,7 @@ import com.candou.util.URLFetchUtil;
 /**
  * 精彩微信 爬虫逻辑。
  *
- * @author jiangchao
+ * @author niuliwei
  */
 public class JCWX_JobCrawler {
 
@@ -72,16 +74,20 @@ public class JCWX_JobCrawler {
                     JsonNode appNode = appNodeList.get(index);
 
                     Job job = new Job();
-                    job.setId(Integer.parseInt(appNode.get("id").asText()));
+                    job.setJob_id(Integer.parseInt(appNode.get("id").asText()));
                     job.setTitle(appNode.get("thumbnail").asText());
                     job.setWxh(appNode.get("wxh").asText());
                     job.setCname(appNode.get("category").asText());
                     job.setViews(Integer.parseInt(appNode.get("views").asText()));
                     job.setContent(appNode.get("content").asText());
                     job.setThumbnail(appNode.get("thumbnail").asText());
+                    job.setCreatedAt(DateTimeUtil.nowDateTime());
+                    job.setUpdatedAt(DateTimeUtil.nowDateTime());
+                    job.setCategoryId(category.getCid());
+                    job.setCategoryName(category.getCname());
                     log.info(job);
                     // 入库
-                    // TODO
+                    JobDao.addJob(job);
                 }
 
                 page++;
