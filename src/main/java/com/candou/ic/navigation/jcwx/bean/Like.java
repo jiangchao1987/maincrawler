@@ -1,6 +1,6 @@
 package com.candou.ic.navigation.jcwx.bean;
 
-public class Photo {
+public class Like {
 
 
 }

@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import com.candou.ic.navigation.jcwx.crawler.JCWX_JobCrawler;
 
 /**
- * 精彩微信 爬虫入口。
+ * 精彩微信 Job爬虫入口。
  *
  * @author niuliwei
  */

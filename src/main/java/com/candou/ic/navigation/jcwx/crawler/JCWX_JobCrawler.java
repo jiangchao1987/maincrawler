@@ -19,9 +19,9 @@ import com.candou.util.TextUtil;
 import com.candou.util.URLFetchUtil;
 
 /**
- * 精彩微信 爬虫逻辑。
+ * 精彩微信 Job爬虫逻辑。
  *
- * @author niuliwei
+ * @author jiangchao
  */
 public class JCWX_JobCrawler {
 
@@ -36,6 +36,7 @@ public class JCWX_JobCrawler {
 
     public void start() {
         List<Category> categories = getCategory();
+        List<Job> newJobs = new ArrayList<Job>();
 
         CategoryDao.addBatchCategory(categories);
 
@@ -74,7 +75,7 @@ public class JCWX_JobCrawler {
                     JsonNode appNode = appNodeList.get(index);
 
                     Job job = new Job();
-                    job.setJob_id(Integer.parseInt(appNode.get("id").asText()));
+                    job.setId(Integer.parseInt(appNode.get("id").asText()));
                     job.setTitle(appNode.get("thumbnail").asText());
                     job.setWxh(appNode.get("wxh").asText());
                     job.setCname(appNode.get("category").asText());
@@ -83,11 +84,16 @@ public class JCWX_JobCrawler {
                     job.setThumbnail(appNode.get("thumbnail").asText());
                     job.setCreatedAt(DateTimeUtil.nowDateTime());
                     job.setUpdatedAt(DateTimeUtil.nowDateTime());
-                    job.setCategoryId(category.getCid());
-                    job.setCategoryName(category.getCname());
-                    log.info(job);
-                    // 入库
-                    JobDao.addJob(job);
+                    job.setCid(category.getCid());
+                    job.setCname(category.getCname());
+
+                    newJobs.add(job);
+                }
+
+                if (newJobs.size() > 0) {
+                    log.info("add batch jobs");
+                    JobDao.addBatchJobs(newJobs);
+                    newJobs.clear();
                 }
 
                 page++;
