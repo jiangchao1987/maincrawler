@@ -75,11 +75,13 @@ public class FileUtil {
 		url = url.replace(" ", "%20"); 	// 将url中的空格替换成%20, 使用encoder会把空格替换成+, 不符合要求
 		
 		logger.info("download: " + url);
-
 		DownloadTask.setDebug(debug);
+		//target.getAbsolutePath()文件的绝对路径
 		DownloadTask task = new DownloadTask(url, target.getAbsolutePath(), threadCount);
 		try {
+			logger.info("---开始下载---");
 			task.startDown();
+			logger.info("---监听线程---");
 			task.addTaskListener(new DownloadTaskListener() {
 				public void autoCallback(DownloadTaskEvent event) {
 					int progress = (int) (event.getReceivedCount() * 100.0 / event.getTotalCount());
@@ -101,18 +103,19 @@ public class FileUtil {
 		}
 	}
 	
-//	public static void main(String[] args) throws InterruptedException {
-//		for (int index = 0; index < 10; index++)  {
-//			String url = "http://download.shendu.com/downloads/rom/886-shendu.com-samsung-s5830-cm-7.2.0-cooper-Sip-signed.zip";
-//			File target = new File("C:\\androidrom\\roms\\" + index + ".zip");
-//			remoteFile(url, target, false, 6);
-//			
-//			finished = false;
-//
-//			while (!finished) {
-//				Thread.sleep(10 * 1000);
-//			}
-//		}
-//	}
+	public static void main(String[] args) throws InterruptedException {
+		for (int index = 0; index < 10; index++)  {
+			//String url = "http://download.shendu.com/downloads/rom/886-shendu.com-samsung-s5830-cm-7.2.0-cooper-Sip-signed.zip";
+			String url = "http://download.shendu.com/downloads/rom/motorola/MB860_ME860/368_shendu_artix4gv1.0.zip";
+			File target = new File("F:\\androidrom\\roms\\" + index + ".zip");
+			remoteFile(url, target, false, 6);
+			
+			finished = false;
+
+			while (!finished) {
+				Thread.sleep(10 * 1000);
+			}
+		}
+	}
 
 }

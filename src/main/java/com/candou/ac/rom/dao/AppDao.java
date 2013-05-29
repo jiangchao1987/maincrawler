@@ -76,13 +76,16 @@ public class AppDao {
 		return flag;
 	}
 
+	/**
+	 * 取出所有还没有文件地址的应用ID和下载地址，以便下载文件
+	 * @return
+	 */
 	public static List<RomApp> findApps() {
 		List<RomApp> apps = new ArrayList<RomApp>();
 		try {
 			Connection connection = Database.getConnection();
 			Statement st = connection.createStatement();
-			ResultSet resultSet = st
-					.executeQuery("select app_id, download_url from tb_app where isnull(filename)");
+			ResultSet resultSet = st.executeQuery("select app_id, download_url from tb_app where isnull(filename)");
 
 			while (resultSet.next()) {
 				RomApp app = new RomApp();
@@ -101,11 +104,14 @@ public class AppDao {
 		return apps;
 	}
 
+	/**
+	 * 更新app应用
+	 * @param app
+	 */
 	public static void updateFileName(RomApp app) {
 		try {
 			Connection connection = Database.getConnection();
-			PreparedStatement ps = connection
-					.prepareStatement("update tb_app set filename = ?, filemd5 = ?, updated_at = ? where app_id = ?");
+			PreparedStatement ps = connection.prepareStatement("update tb_app set filename = ?, filemd5 = ?, updated_at = ? where app_id = ?");
 
 			String now = DateTimeUtil.nowDateTime();
 			log.info("RomApp [appId=" + app.getAppId() + ", fileName="

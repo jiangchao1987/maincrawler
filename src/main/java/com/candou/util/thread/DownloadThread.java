@@ -13,6 +13,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.log4j.Logger;
+
 
 /**
  * 分段下载线程
@@ -26,6 +28,7 @@ public class DownloadThread extends Thread {
 	private boolean isRange = true;
 	
 	private Vector<DownloadThreadListener> listeners = new Vector<DownloadThreadListener>();
+	private static Logger log = Logger.getLogger(DownloadThread.class);
 	
 	/**
 	 * 构建下载线程
@@ -57,6 +60,7 @@ public class DownloadThread extends Thread {
 	 * 现在过程代码
 	 */
 	public void run() {
+		log.info("init DownloadThread--run function 0000000");
 		if(DownloadTask.getDebug()){
 			System.out.println("Start:" + startPosition + "-" +endPosition);
 		}
@@ -68,6 +72,7 @@ public class DownloadThread extends Thread {
 			}
 			HttpResponse response = httpClient.execute(httpGet);
 			int statusCode = response.getStatusLine().getStatusCode();
+			System.out.println("------statusCode22------"+statusCode);
 			if(DownloadTask.getDebug()){
 				for(Header header : response.getAllHeaders()){
 					System.out.println(header.getName()+":"+header.getValue());
@@ -75,19 +80,31 @@ public class DownloadThread extends Thread {
 				System.out.println("statusCode:" + statusCode);
 			}
 			if(statusCode == 206 || (statusCode == 200 && !isRange)){
-				InputStream inputStream = response.getEntity().getContent();
-				//创建随机读写类
-				RandomAccessFile outputStream = new RandomAccessFile(file, "rw");
-				//跳到指定位置
-				outputStream.seek(startPosition);
-				int count = 0;byte[] buffer=new byte[1024];
-				while((count = inputStream.read(buffer, 0, buffer.length))>0){
-					outputStream.write(buffer, 0, count);
-					//触发下载事件
-					fireAfterPerDown(new DownloadThreadEvent(this,count));
-				}
-				outputStream.close();
+				System.out.println("纳尼!");
+					try {
+						InputStream inputStream = response.getEntity().getContent();
+						//创建随机读写类
+						RandomAccessFile outputStream = new RandomAccessFile(file, "rw");
+						//跳到指定位置
+						outputStream.seek(startPosition);
+						int count = 0;
+						byte[] buffer=new byte[1024];
+						while((count = inputStream.read(buffer, 0, buffer.length))>0){
+							outputStream.write(buffer, 0, count);
+							//触发下载事件
+							fireAfterPerDown(new DownloadThreadEvent(this,count));
+						}
+						log.info("关闭output流");
+						outputStream.close();
+						//outputStream
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				
+				
 			}
+			log.info("关闭http链接");
 			httpGet.abort();
 		} catch (Exception e) {
 			e.printStackTrace();

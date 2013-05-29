@@ -8,6 +8,7 @@ public class DaoFactory {
 	private static ApplicationContext ctx;
 
 	private DaoFactory() {
+		
 	}
 
 	static {

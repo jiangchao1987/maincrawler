@@ -47,6 +47,7 @@ public class RomImageDownloader {
     private static String getSaveDir(String url, String fileName) {
     	url = url.replace("http://sr.61658.com", "");
         url = url.replace("http://www.shendu.com", "");
+        url = url.replace("http://s01.61658.com", "");
         url = url.replace(fileName, "");
         return url;
     }

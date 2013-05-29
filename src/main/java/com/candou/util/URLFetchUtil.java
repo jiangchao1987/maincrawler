@@ -33,6 +33,7 @@ public class URLFetchUtil {
 			connection.setRequestProperty("User-Agent", BrowserUtil.getRandomBrowserUserAgent());
 			connection.setRequestProperty("Accept-Language", "zh-cn, zh;q=0.75, en-us;q=0.50, en;q=0.25");
 
+			logger.info("返回的状态码:------"+connection.getResponseCode());
 			if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 

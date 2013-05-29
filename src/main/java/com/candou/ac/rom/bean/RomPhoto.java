@@ -3,7 +3,7 @@ package com.candou.ac.rom.bean;
 public class RomPhoto {
     
     private int appId;
-    private String originalUrl;
+    private String originalUrl;//URL地址
 
     public int getAppId() {
         return appId;

@@ -50,11 +50,12 @@ public class RomDownloader {
 			if (Configure.getProperty("download_debug_mode").equalsIgnoreCase("yes")) {
 				downloadDebug = true;
 			}
-			
+			//是否已经下载完成
 			FileUtil.finished = false;
 			
-			FileUtil.remoteFile(url, targetFile, downloadDebug,
-					Integer.parseInt(Configure.getProperty("max_thread_count")));
+			//开始多线程下载ROOM
+			log.info("开始多线程下载ROOM");
+			FileUtil.remoteFile(url, targetFile, downloadDebug,Integer.parseInt(Configure.getProperty("max_thread_count")));
 
 			while (!FileUtil.finished) {
 				try {
@@ -80,8 +81,8 @@ public class RomDownloader {
 	}
 
 	private static String getFileName(String url) {
-		return url.substring(url.lastIndexOf("/") + 1, url.length()).replace("shendu", "candou")
-				.replace("ShenDu", "candou");
+		//String.replace("a","b");    使用b替换a
+		return url.substring(url.lastIndexOf("/") + 1, url.length()).replace("shendu", "candou").replace("ShenDu", "candou");
 	}
 
 }
