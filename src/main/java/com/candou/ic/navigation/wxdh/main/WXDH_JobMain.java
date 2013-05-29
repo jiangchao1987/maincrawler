@@ -6,7 +6,8 @@ public class WXDH_JobMain {
      * @param args
      */
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
+        WXDH_AppMain appMain = new WXDH_AppMain();
+        appMain.start();
 
     }
 
