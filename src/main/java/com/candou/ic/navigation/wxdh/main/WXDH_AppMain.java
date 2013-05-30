@@ -26,7 +26,7 @@ import com.candou.ic.navigation.wxdh.dao.AppDao;
 import com.candou.ic.navigation.wxdh.dao.CategoryDao;
 import com.candou.ic.navigation.wxdh.dao.JobDao;
 import com.candou.ic.navigation.wxdh.dao.PhotoDao;
-import com.candou.ic.navigation.wxdh.imgload.GFanUpdatePhotoDownloader;
+import com.candou.ic.navigation.wxdh.imgload.PhotoDownloader;
 import com.candou.ic.navigation.wxdh.vo.App;
 import com.candou.ic.navigation.wxdh.vo.Category;
 import com.candou.ic.navigation.wxdh.vo.Job;
@@ -105,7 +105,7 @@ public class WXDH_AppMain {
                 int downloadCount = 1;
                 for (Job job : jobs) {
                     try {
-                        GFanUpdatePhotoDownloader.downloadIcon_job(job);
+                        PhotoDownloader.downloadIcon_job(job);
                     } catch (Exception e) {
                         log.info(e.getMessage());
                     }
@@ -154,7 +154,7 @@ public class WXDH_AppMain {
                 int downloadCount = 1;
                 for (Photo photo : photos) {
                     try {
-                        GFanUpdatePhotoDownloader.downloadPhoto(photo);
+                        PhotoDownloader.downloadPhoto(photo);
                     } catch (Exception e) {
                         log.info(e.getMessage());
                     }
@@ -168,7 +168,7 @@ public class WXDH_AppMain {
                 // 下载photo
                 for (Photo photo : photos) {
                     try {
-                        GFanUpdatePhotoDownloader.downloadPhoto_im(photo);
+                        PhotoDownloader.downloadPhoto_im(photo);
                     } catch (Exception e) {
                         log.info(e.getMessage());
                     }
@@ -201,7 +201,7 @@ public class WXDH_AppMain {
                 // 下载app icon
                 for (App app_icon : apps) {
                     try {
-                        GFanUpdatePhotoDownloader.downloadIcon_app(app_icon);
+                        PhotoDownloader.downloadIcon_app(app_icon);
                     } catch (Exception e) {
                         log.info(e.getMessage());
                     }
@@ -211,7 +211,7 @@ public class WXDH_AppMain {
                 // 下载app imc(二维码)
                 for (App app_imc : apps) {
                     try {
-                        GFanUpdatePhotoDownloader.downloadIcon_app_imc(app_imc);
+                        PhotoDownloader.downloadIcon_app_imc(app_imc);
                     } catch (Exception e) {
                         log.info(e.getMessage());
                     }
