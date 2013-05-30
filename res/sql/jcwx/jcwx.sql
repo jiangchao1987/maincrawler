@@ -1,25 +1,25 @@
 CREATE DATABASE `db_weixin` /*!40100 DEFAULT CHARACTER SET utf8 */
 
 CREATE TABLE `jcwx_category` (
-  `cid` int(11) NOT NULL AUTO_INCREMENT COMMENT '·ÖÀàID',
-  `cname` varchar(255) DEFAULT NULL COMMENT '·ÖÀàÃû³Æ',
+  `cid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'åˆ†ç±»ID',
+  `cname` varchar(255) DEFAULT NULL COMMENT 'åˆ†ç±»åç§°',
   PRIMARY KEY (`cid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `jcwx_article` (
-  `article_id` int(11) NOT NULL DEFAULT '0' COMMENT 'Î¢ĞÅid',
-  `title` varchar(255) DEFAULT NULL COMMENT 'Î¢ĞÅÃû³Æ',
-  `views` int(11) DEFAULT '0' COMMENT '¹Ø×¢ÈËÊı',
-  `likes` int(11) DEFAULT '0' COMMENT '¹Ø×¢ËûÈËÊı',
-  `wxh` varchar(255) DEFAULT NULL COMMENT 'Î¢ĞÅºÅ',
+  `article_id` int(11) NOT NULL DEFAULT '0' COMMENT 'å¾®ä¿¡id',
+  `title` varchar(255) DEFAULT NULL COMMENT 'å¾®ä¿¡åç§°',
+  `views` int(11) DEFAULT '0' COMMENT 'å…³æ³¨äººæ•°',
+  `likes` int(11) DEFAULT '0' COMMENT 'å…³æ³¨ä»–äººæ•°',
+  `wxh` varchar(255) DEFAULT NULL COMMENT 'å¾®ä¿¡å·',
   `wxqr` varchar(255) DEFAULT NULL,
-  `content` text COMMENT 'Î¢ĞÅ½éÉÜ',
-  `first_category_id` int(11) DEFAULT NULL COMMENT 'Ò»¼¶Àà±ğid',
-  `first_category_name` varchar(255) DEFAULT NULL COMMENT 'Ò»¼¶Àà±ğÃû³Æ',
-  `second_category_name` varchar(255) DEFAULT NULL COMMENT '¶ş¼¶Àà±ğÃû³Æ',
-  `thumbnail` varchar(255) DEFAULT NULL COMMENT '±êÌâÍ¼Æ¬Â·¾¶',
-  `created_at` varchar(255) DEFAULT NULL COMMENT '´´½¨Ê±¼ä',
-  `updated_at` varchar(255) DEFAULT NULL COMMENT 'ĞŞ¸ÄÊ±¼ä',
+  `content` text COMMENT 'å¾®ä¿¡ä»‹ç»',
+  `first_category_id` int(11) DEFAULT NULL COMMENT 'ä¸€çº§ç±»åˆ«id',
+  `first_category_name` varchar(255) DEFAULT NULL COMMENT 'ä¸€çº§ç±»åˆ«åç§°',
+  `second_category_name` varchar(255) DEFAULT NULL COMMENT 'äºŒçº§ç±»åˆ«åç§°',
+  `thumbnail` varchar(255) DEFAULT NULL COMMENT 'æ ‡é¢˜å›¾ç‰‡è·¯å¾„',
+  `created_at` varchar(255) DEFAULT NULL COMMENT 'åˆ›å»ºæ—¶é—´',
+  `updated_at` varchar(255) DEFAULT NULL COMMENT 'ä¿®æ”¹æ—¶é—´',
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   UNIQUE KEY `article_id` (`article_id`),
