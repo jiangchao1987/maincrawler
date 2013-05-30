@@ -11,6 +11,11 @@ import com.candou.ic.navigation.jcwx.bean.App;
 import com.candou.ic.navigation.jcwx.bean.Job;
 import com.candou.util.URLFetchUtil;
 
+/**
+ * 精彩微信 App爬虫解析器。
+ *
+ * @author jiangchao
+ */
 public class JCWX_AppParser {
 
     private static final int retryNumber = 5;

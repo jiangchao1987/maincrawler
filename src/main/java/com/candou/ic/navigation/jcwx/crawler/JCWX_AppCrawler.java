@@ -11,6 +11,11 @@ import com.candou.ic.navigation.jcwx.bean.Like;
 import com.candou.ic.navigation.jcwx.crawler.parser.JCWX_AppParser;
 import com.candou.ic.navigation.jcwx.dao.JobDao;
 
+/**
+ * 精彩微信 App爬虫逻辑。
+ *
+ * @author jiangchao
+ */
 public class JCWX_AppCrawler {
 
     private static Logger log = Logger.getLogger(JCWX_AppCrawler.class);
