@@ -81,7 +81,7 @@ public class JCWX_AppCrawler {
 
             Like newLike = new Like();
             newLike.setArticleId(like.getArticleId());
-            newLike.setTitle(newLike.getTitle());
+            newLike.setTitle(like.getTitle());
             newLike.setLikeId(like.getLikeId());
             newLike.setThumbnail(localThumbnail);
             newLike.setCreatedAt(like.getCreatedAt());

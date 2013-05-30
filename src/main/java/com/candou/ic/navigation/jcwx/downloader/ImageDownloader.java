@@ -5,7 +5,6 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 
-import com.candou.conf.Configure;
 import com.candou.util.ImageUtil;
 
 public class ImageDownloader {
@@ -14,7 +13,7 @@ public class ImageDownloader {
     public static String downloader(String imageUrl, String dbPath, String savePath) {
         String fileName = ImageUtil.getFileName(imageUrl);
 
-        File dir = new File(Configure.getProperty(savePath) + ImageUtil.getDirName(imageUrl));
+        File dir = new File(savePath + ImageUtil.getDirName(imageUrl));
         if (!dir.exists()) {
             dir.mkdirs();
         }
