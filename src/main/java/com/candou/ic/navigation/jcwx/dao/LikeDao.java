@@ -16,18 +16,19 @@ public class LikeDao {
 
     public static void addBatchLikes(List<Like> likes) {
         try {
-            String sql = "INSERT IGNORE INTO jcwx_like (like_id,app_id,title,thumbnail) VALUES (?,?,?,?)";
+            String sql = "INSERT IGNORE INTO jcwx_like (like_id,article_id,title,thumbnail,created_at,updated_at) VALUES (?,?,?,?,?,?)";
             Connection connection = Database.getConnection();
             PreparedStatement ps = connection.prepareStatement(sql);
 
             for (Like Like : likes) {
-
                 log.info(Like);
 
                 ps.setInt(1, Like.getLikeId());
-                ps.setInt(2, Like.getAppId());
+                ps.setInt(2, Like.getArticleId());
                 ps.setString(3, Like.getTitle());
                 ps.setString(4, Like.getThumbnail());
+                ps.setString(5, Like.getCreatedAt());
+                ps.setString(6, Like.getUpdatedAt());
                 ps.executeUpdate();
             }
 
@@ -39,4 +40,5 @@ public class LikeDao {
             log.error(e.getMessage());
         }
     }
+
 }

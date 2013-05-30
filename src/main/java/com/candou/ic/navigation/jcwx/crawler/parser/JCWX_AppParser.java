@@ -55,8 +55,8 @@ public class JCWX_AppParser {
             Article article = new Article();
             article.setFirstCid(job.getCid());
             article.setFirstCname(job.getCname());
-            article.setAppId(Integer.parseInt(articleNode.get(index).get("id").asText()));
-            article.setName(articleNode.get(index).get("title").asText());
+            article.setArticleId(Integer.parseInt(articleNode.get(index).get("id").asText()));
+            article.setTitle(articleNode.get(index).get("title").asText());
             article.setSecondCname(articleNode.get(index).get("category").asText());
             article.setViews(Integer.parseInt(articleNode.get(index).get("views").asText()));
             article.setLike(Integer.parseInt(articleNode.get(index).get("like").asText()));
@@ -81,12 +81,12 @@ public class JCWX_AppParser {
         }
 
         List<Like> likes = new ArrayList<Like>();
-        for (int i = 0; i < likeNode.size(); i++) {
+        for (int index = 0; index < likeNode.size(); index++) {
             Like like = new Like();
-            like.setAppId(articles.get(0).getAppId());
-            like.setLikeId(Integer.parseInt(likeNode.get(i).get("id").asText()));
-            like.setTitle(likeNode.get(i).get("title").asText());
-            like.setThumbnail(likeNode.get(i).get("thumbnail").asText());
+            like.setArticleId(articles.get(0).getArticleId());
+            like.setLikeId(Integer.parseInt(likeNode.get(index).get("id").asText()));
+            like.setTitle(likeNode.get(index).get("title").asText());
+            like.setThumbnail(likeNode.get(index).get("thumbnail").asText());
             like.setCreatedAt(DateTimeUtil.nowDateTime());
             like.setUpdatedAt(DateTimeUtil.nowDateTime());
             likes.add(like);

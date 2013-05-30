@@ -19,8 +19,8 @@ import com.candou.ic.navigation.jcwx.downloader.ImageDownloader;
 public class JCWX_AppCrawler {
 
     private static Logger log = Logger.getLogger(JCWX_AppCrawler.class);
-    private static int batchAddLimit = 20;
-    private static int batchAddLikeLimit = 10;
+    private static int batchAddLimit = 5;
+    private static int batchAddLikeLimit = 5;
 
     public void start() {
         List<Job> jobs = JobDao.findJobs();
@@ -80,7 +80,7 @@ public class JCWX_AppCrawler {
             String localThumbnail = ImageDownloader.downloader(like.getThumbnail(), Configure.getProperty("db_path"), Configure.getProperty("save_path"));
 
             Like newLike = new Like();
-            newLike.setAppId(like.getAppId());
+            newLike.setArticleId(like.getArticleId());
             newLike.setTitle(newLike.getTitle());
             newLike.setLikeId(like.getLikeId());
             newLike.setThumbnail(localThumbnail);

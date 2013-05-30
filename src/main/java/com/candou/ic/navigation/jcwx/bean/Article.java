@@ -2,8 +2,8 @@ package com.candou.ic.navigation.jcwx.bean;
 
 public class Article {
 
-    private int appId;
-    private String name;
+    private int articleId;
+    private String title;
     private int views;
     private int like;
     private String wxh;
@@ -16,20 +16,20 @@ public class Article {
     private String firstCname;
     private String secondCname;
 
-    public int getAppId() {
-        return appId;
+    public int getArticleId() {
+        return articleId;
     }
 
-    public void setAppId(int appId) {
-        this.appId = appId;
+    public void setArticleId(int articleId) {
+        this.articleId = articleId;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getViews() {

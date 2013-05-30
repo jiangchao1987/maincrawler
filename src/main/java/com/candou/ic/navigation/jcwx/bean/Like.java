@@ -3,7 +3,7 @@ package com.candou.ic.navigation.jcwx.bean;
 public class Like {
 
     private int likeId;
-    private int appId;
+    private int articleId;
     private String title;
     private String thumbnail;
     private String createdAt;
@@ -17,12 +17,12 @@ public class Like {
         this.likeId = likeId;
     }
 
-    public int getAppId() {
-        return appId;
+    public int getArticleId() {
+        return articleId;
     }
 
-    public void setAppId(int appId) {
-        this.appId = appId;
+    public void setArticleId(int articleId) {
+        this.articleId = articleId;
     }
 
     public String getTitle() {
