@@ -24,8 +24,8 @@ import com.candou.ic.navigation.jcwx.downloader.ImageDownloader;
 public class JCWX_AppCrawler {
 
     private static Logger log = Logger.getLogger(JCWX_AppCrawler.class);
-    private static int batchAddLimit = 5;
-    private static int batchAddLikeLimit = 5;
+    private static int batchAddLimit = 20;
+    private static int batchAddLikeLimit = 10;
 
     public void start() {
         List<Job> jobs = JobDao.findJobs();

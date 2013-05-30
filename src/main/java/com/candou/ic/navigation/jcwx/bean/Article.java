@@ -120,4 +120,13 @@ public class Article {
         this.secondCname = secondCname;
     }
 
+    @Override
+    public String toString() {
+        return "Article [articleId=" + articleId + ", title=" + title + ", views=" + views
+            + ", like=" + like + ", wxh=" + wxh + ", wxqr=" + wxqr + ", content=" + content
+            + ", thumbnail=" + thumbnail + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
+            + ", firstCid=" + firstCid + ", firstCname=" + firstCname + ", secondCname="
+            + secondCname + "]";
+    }
+
 }
