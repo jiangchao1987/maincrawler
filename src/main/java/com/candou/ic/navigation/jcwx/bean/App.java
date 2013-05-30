@@ -99,5 +99,5 @@ public class App {
             + thumbnail + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", firstCid="
             + firstCid + ", firstCname=" + firstCname + ", secondCname=" + secondCname + "]";
     }
-
 }
+
