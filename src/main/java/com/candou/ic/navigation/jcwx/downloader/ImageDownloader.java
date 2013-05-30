@@ -31,7 +31,6 @@ public class ImageDownloader {
                     log.info("save to " + targetFile);
                 } else {
                     log.warn("download failed");
-                    return null;
                 }
             }
         } catch (CMMException e) {
