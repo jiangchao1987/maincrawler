@@ -57,4 +57,11 @@ public class Like {
         this.updatedAt = updatedAt;
     }
 
+    @Override
+    public String toString() {
+        return "Like [likeId=" + likeId + ", articleId=" + articleId + ", title=" + title
+            + ", thumbnail=" + thumbnail + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
+            + "]";
+    }
+
 }

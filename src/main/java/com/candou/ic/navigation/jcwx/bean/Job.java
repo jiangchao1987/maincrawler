@@ -93,4 +93,11 @@ public class Job {
         this.cid = cid;
     }
 
+    @Override
+    public String toString() {
+        return "Job [id=" + id + ", title=" + title + ", wxh=" + wxh + ", cname=" + cname
+            + ", views=" + views + ", content=" + content + ", thumbnail=" + thumbnail
+            + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", cid=" + cid + "]";
+    }
+
 }
