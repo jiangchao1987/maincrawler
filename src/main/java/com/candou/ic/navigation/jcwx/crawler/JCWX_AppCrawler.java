@@ -9,6 +9,7 @@ import com.candou.ic.navigation.jcwx.bean.App;
 import com.candou.ic.navigation.jcwx.bean.Job;
 import com.candou.ic.navigation.jcwx.bean.Like;
 import com.candou.ic.navigation.jcwx.crawler.parser.JCWX_AppParser;
+import com.candou.ic.navigation.jcwx.dao.AppDao;
 import com.candou.ic.navigation.jcwx.dao.JobDao;
 
 public class JCWX_AppCrawler {
@@ -28,8 +29,27 @@ public class JCWX_AppCrawler {
         int all = jobs.size();
         for (Job job : jobs) {
             log.info("[" + ++appcounter + "/" + all + "] " + job.getTitle());
-
             App app = JCWX_AppParser.parse(job);
+
+            if (app == null) {
+                failedJobs.add(job);
+                continue;
+            }
+            apps.add(app);
+            fetchedJobs.add(job);
+
+            if (apps.size() >= batchAddLimit || appcounter >= all) {
+                AppDao.addBatchApps(apps);
+                apps.clear();
+                JobDao.batchUpdateMatchedStatus(fetchedJobs);
+                fetchedJobs.clear();
+                log.info("batch add apps");
+
+            }
+            // update failed jobs
+            JobDao.batchUpdateFailedStatus(failedJobs);
+            log.info("faild fetch job:" + failedJobs);
+
         }
     }
 }

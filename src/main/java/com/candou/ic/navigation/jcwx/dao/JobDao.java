@@ -60,11 +60,8 @@ public class JobDao {
                 Job job = new Job();
                 job.setId(resultSet.getInt("job_id"));
                 job.setTitle(resultSet.getString("title"));
-//                job.setUrl(resultSet.getString("url"));
-//                job.setCreatedAt(resultSet.getString("created_at"));
-//                job.setUpdatedAt(resultSet.getString("updated_at"));
-//                job.setCategoryID(resultSet.getInt("category_id"));
-//                job.setCategoryName(resultSet.getString("category_name"));
+                job.setCid(resultSet.getInt("cid"));
+                job.setCname(resultSet.getString("cname"));
 
                 jobs.add(job);
             }
@@ -77,6 +74,42 @@ public class JobDao {
             log.error(e.getMessage());
         }
         return jobs;
+    }
+
+    public static void batchUpdateMatchedStatus(List<Job> jobs) {
+        try {
+            Connection connection = Database.getConnection();
+            PreparedStatement ps = connection.prepareStatement("update jcwx_job set is_matched = 1 where job_id = ?");
+
+            for (Job job : jobs) {
+                ps.setInt(1, job.getId());
+                ps.executeUpdate();
+            }
+
+            ps.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+    }
+
+    public static void batchUpdateFailedStatus(List<Job> jobs) {
+        try {
+            Connection connection = Database.getConnection();
+            PreparedStatement ps = connection.prepareStatement("update jcwx_job set is_matched = -1 where job_id = ?");
+
+            for (Job job : jobs) {
+                ps.setInt(1, job.getId());
+                ps.executeUpdate();
+            }
+
+            ps.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
     }
 
 }
