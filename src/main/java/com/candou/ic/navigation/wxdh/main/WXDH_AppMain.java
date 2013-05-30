@@ -34,7 +34,12 @@ import com.candou.ic.navigation.wxdh.vo.Photo;
 import com.candou.util.BrowserUtil;
 import com.candou.util.URLFetchUtil;
 
+/**
+ * @author aifeng.liu
+ *
+ */
 public class WXDH_AppMain {
+
     private static HtmlCleaner cleaner;
     private final int retryNumber = 5;
     private static Logger log = Logger.getLogger(WXDH_AppMain.class);
@@ -46,7 +51,6 @@ public class WXDH_AppMain {
     private static List<Photo> photos = new ArrayList<Photo>();
 
     public void start() {
-        int page = 1;
         while (true) {
             count++;
             log.info("正在处理第:" + count + "页---------------------------------");
