@@ -1,6 +1,8 @@
 package com.candou.ic.navigation.jcwx.crawler.parser;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonNode;
@@ -8,7 +10,10 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.candou.ic.navigation.jcwx.bean.App;
+import com.candou.ic.navigation.jcwx.bean.Article;
 import com.candou.ic.navigation.jcwx.bean.Job;
+import com.candou.ic.navigation.jcwx.bean.Like;
+import com.candou.util.DateTimeUtil;
 import com.candou.util.URLFetchUtil;
 
 /**
@@ -44,21 +49,56 @@ public class JCWX_AppParser {
         // analyze
         // article
         JsonNode articleNode = getNode(htmlSource, "WeiXin_Article");
-
         if (articleNode == null) {
             return null;
         }
 
         App app = new App();
-        System.out.println(articleNode.toString());
+
+        List<Article> articles = new ArrayList<Article>();
+        for (int index = 0; index < articleNode.size(); index++) {
+            Article article = new Article();
+            article.setFirstCid(job.getCid());
+            article.setFirstCname(job.getCname());
+            article.setArticleId(Integer.parseInt(articleNode.get(index).get("id").asText()));
+            article.setTitle(articleNode.get(index).get("title").asText());
+            article.setSecondCname(articleNode.get(index).get("category").asText());
+            article.setViews(Integer.parseInt(articleNode.get(index).get("views").asText()));
+            article.setLike(Integer.parseInt(articleNode.get(index).get("like").asText()));
+            article.setThumbnail(articleNode.get(index).get("thumbnail").asText());
+            article.setWxh(articleNode.get(index).get("wxh").asText());
+            article.setWxqr(articleNode.get(index).get("wxqr").asText());
+            article.setContent(articleNode.get(index).get("content").asText());
+            article.setUpdatedAt(DateTimeUtil.nowDateTime());
+            article.setCreatedAt(DateTimeUtil.nowDateTime());
+            articles.add(article);
+        }
+        app.setArticles(articles);
+
+        if (articles.isEmpty()) {
+            return null;
+        }
+
         // like
         JsonNode likeNode = getNode(htmlSource, "WeiXin_Like");
         if (likeNode == null) {
-            return null;
+            return app;
         }
-        System.out.println(likeNode);
 
-        return null;
+        List<Like> likes = new ArrayList<Like>();
+        for (int index = 0; index < likeNode.size(); index++) {
+            Like like = new Like();
+            like.setArticleId(articles.get(0).getArticleId());
+            like.setLikeId(Integer.parseInt(likeNode.get(index).get("id").asText()));
+            like.setTitle(likeNode.get(index).get("title").asText());
+            like.setThumbnail(likeNode.get(index).get("thumbnail").asText());
+            like.setCreatedAt(DateTimeUtil.nowDateTime());
+            like.setUpdatedAt(DateTimeUtil.nowDateTime());
+            likes.add(like);
+        }
+        app.setLikes(likes);
+
+        return app;
     }
 
     public static JsonNode getNode(String json, String flag) {
