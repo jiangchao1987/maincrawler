@@ -26,7 +26,7 @@ public class LikeDao {
 
                 ps.setInt(1, Like.getLikeId());
                 ps.setInt(2, Like.getAppId());
-                ps.setString(3, Like.getName());
+                ps.setString(3, Like.getTitle());
                 ps.setString(4, Like.getThumbnail());
                 ps.executeUpdate();
             }

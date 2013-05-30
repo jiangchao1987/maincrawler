@@ -10,9 +10,9 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.candou.ic.navigation.jcwx.bean.App;
+import com.candou.ic.navigation.jcwx.bean.Article;
 import com.candou.ic.navigation.jcwx.bean.Job;
 import com.candou.ic.navigation.jcwx.bean.Like;
-import com.candou.ic.navigation.jcwx.dao.LikeDao;
 import com.candou.util.DateTimeUtil;
 import com.candou.util.URLFetchUtil;
 
@@ -44,41 +44,54 @@ public class JCWX_AppParser {
         // analyze
         // article
         JsonNode articleNode = getNode(htmlSource, "WeiXin_Article");
-
         if (articleNode == null) {
             return null;
         }
 
         App app = new App();
-        app.setFirstCid(job.getCid());
-        app.setFirstCname(job.getCname());
-        app.setApp_id(Integer.parseInt(articleNode.get(0).get("id").asText()));
-        app.setName(articleNode.get(0).get("title").asText());
-        app.setSecondCname(articleNode.get(0).get("category").asText());
-        app.setViews(Integer.parseInt(articleNode.get(0).get("views").asText()));
-        app.setLike(Integer.parseInt(articleNode.get(0).get("like").asText()));
-        app.setThumbnail(articleNode.get(0).get("thumbnail").asText());
-        app.setWxh(articleNode.get(0).get("wxh").asText());
-        app.setWxqr(articleNode.get(0).get("wxqr").asText());
-        app.setContent(articleNode.get(0).get("content").asText());
-        app.setUpdatedAt(DateTimeUtil.nowDateTime());
-        app.setCreatedAt(DateTimeUtil.nowDateTime());
-        System.out.println(articleNode.toString());
+
+        List<Article> articles = new ArrayList<Article>();
+        for (int index = 0; index < articleNode.size(); index++) {
+            Article article = new Article();
+            article.setFirstCid(job.getCid());
+            article.setFirstCname(job.getCname());
+            article.setAppId(Integer.parseInt(articleNode.get(index).get("id").asText()));
+            article.setName(articleNode.get(index).get("title").asText());
+            article.setSecondCname(articleNode.get(index).get("category").asText());
+            article.setViews(Integer.parseInt(articleNode.get(index).get("views").asText()));
+            article.setLike(Integer.parseInt(articleNode.get(index).get("like").asText()));
+            article.setThumbnail(articleNode.get(index).get("thumbnail").asText());
+            article.setWxh(articleNode.get(index).get("wxh").asText());
+            article.setWxqr(articleNode.get(index).get("wxqr").asText());
+            article.setContent(articleNode.get(index).get("content").asText());
+            article.setUpdatedAt(DateTimeUtil.nowDateTime());
+            article.setCreatedAt(DateTimeUtil.nowDateTime());
+            articles.add(article);
+        }
+        app.setArticles(articles);
+
+        if (articles.isEmpty()) {
+            return null;
+        }
+
         // like
         JsonNode likeNode = getNode(htmlSource, "WeiXin_Like");
-        if (likeNode != null) {
-            List<Like> likes = new ArrayList<Like>();
-            for(int i=0;i<likeNode.size();i++){
-                Like like = new Like();
-                like.setAppId(app.getApp_id());
-                like.setLikeId(Integer.parseInt(likeNode.get(i).get("id").asText()));
-                like.setName(likeNode.get(i).get("title").asText());
-                like.setThumbnail(likeNode.get(i).get("thumbnail").asText());
-                likes.add(like);
-            }
-            LikeDao.addBatchLikes(likes);
+        if (likeNode == null) {
+            return app;
         }
-        System.out.println(likeNode);
+
+        List<Like> likes = new ArrayList<Like>();
+        for (int i = 0; i < likeNode.size(); i++) {
+            Like like = new Like();
+            like.setAppId(articles.get(0).getAppId());
+            like.setLikeId(Integer.parseInt(likeNode.get(i).get("id").asText()));
+            like.setTitle(likeNode.get(i).get("title").asText());
+            like.setThumbnail(likeNode.get(i).get("thumbnail").asText());
+            like.setCreatedAt(DateTimeUtil.nowDateTime());
+            like.setUpdatedAt(DateTimeUtil.nowDateTime());
+            likes.add(like);
+        }
+        app.setLikes(likes);
 
         return app;
     }
