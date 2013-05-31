@@ -22,6 +22,9 @@ public class App {
     private String sc = "";
     private String direct_number = "";// 关注人数
 
+    private String created_at;
+    private String updated_at;
+
 
 
     public String getIcon_name() {
@@ -170,13 +173,32 @@ public class App {
         this.wsu = wsu;
     }
 
+
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public String getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public void setUpdated_at(String updated_at) {
+        this.updated_at = updated_at;
+    }
+
     @Override
     public String toString() {
         return "App [id=" + id + ", name=" + name + ", intro=" + intro + ", url=" + url + ", f=" + f + ", oc=" + oc + ", wsu="
             + wsu + ", detail=" + detail + ", dts=" + dts + ", cid=" + cid + ", cname=" + cname + ", icon=" + icon
             + ", icon_name=" + icon_name + ", photos=" + photos + ", imc=" + imc + ", imc_name=" + imc_name + ", sc=" + sc
-            + ", direct_number=" + direct_number + "]";
+            + ", direct_number=" + direct_number + ", created_at=" + created_at + ", updated_at=" + updated_at + "]";
     }
+
 
 
 
