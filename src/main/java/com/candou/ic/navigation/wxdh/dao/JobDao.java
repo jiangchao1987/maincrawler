@@ -51,27 +51,6 @@ public class JobDao {
         }
     }
 
-    public static boolean exists(int appId) {
-        Connection connection = null;
-        boolean flag = false;
-        try {
-            connection = Database.getConnection();
-            PreparedStatement ps = connection.prepareStatement("select * from " + table_Name + " where id = ?");
-            ps.setInt(1, appId);
-
-            ResultSet resultSet = ps.executeQuery();
-            if (resultSet.next()) {
-                flag = true;
-            }
-            resultSet.close();
-            ps.close();
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return flag;
-    }
-
     public static List<Job> findJobs() {
         List<Job> jobs = new ArrayList<Job>();
         try {
