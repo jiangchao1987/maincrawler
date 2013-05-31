@@ -1,4 +1,4 @@
-CREATE DATABASE `db_weixin` /*!40100 DEFAULT CHARACTER SET utf8 */
+CREATE DATABASE `db_weixin` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
 CREATE TABLE `jcwx_category` (
   `cid` int(11) NOT NULL AUTO_INCREMENT COMMENT '分类ID',
@@ -40,12 +40,12 @@ CREATE TABLE `jcwx_like` (
   `created_at` varchar(255) NOT NULL,
   `updated_at` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `like_id` (`like_id`),
-  UNIQUE KEY `article_id` (`article_id`),
   KEY `title` (`title`),
   KEY `created_at` (`created_at`),
-  KEY `updated_at` (`updated_at`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `updated_at` (`updated_at`),
+  KEY `like_id` (`like_id`),
+  KEY `article_id` (`article_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=469 DEFAULT CHARSET=utf8
 
 CREATE TABLE `jcwx_job` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
