@@ -10,11 +10,11 @@ import org.apache.log4j.Logger;
 
 public class URLFetchUtil {
 	private static Logger logger = Logger.getLogger(URLFetchUtil.class);
-	
+
 	public static String fetchGet(String url) {
 		return fetch(url, "GET");
 	}
-	
+
 	public static String fetchPost(String url) {
 		return fetch(url, "POST");
 	}
@@ -33,7 +33,6 @@ public class URLFetchUtil {
 			connection.setRequestProperty("User-Agent", BrowserUtil.getRandomBrowserUserAgent());
 			connection.setRequestProperty("Accept-Language", "zh-cn, zh;q=0.75, en-us;q=0.50, en;q=0.25");
 
-			logger.info("返回的状态码:------"+connection.getResponseCode());
 			if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
@@ -50,7 +49,7 @@ public class URLFetchUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 			logger.error("Error: " + e.getMessage());
-			
+
 			try {
                 logger.info("sleep 30s ...");
                 Thread.sleep(30000);
