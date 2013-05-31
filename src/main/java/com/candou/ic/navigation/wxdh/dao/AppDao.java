@@ -16,7 +16,7 @@ public class AppDao {
         try {
             Connection connection = Database.getConnection();
             PreparedStatement ps = connection
-                .prepareStatement("insert ignore into "+table_Name+" (id, name, intro, url, f, oc, wsu, detail, dts, cid, cname, icon, icon_name, imc,imc_name, sc,direct_number,created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                .prepareStatement("insert ignore into "+table_Name+" (id, name, intro, url, f, oc, wsu, detail, dts, cid, cname, icon,  imc, sc,direct_number,created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             for (App app : apps) {
                 String now = DateTimeUtil.nowDateTime();
@@ -33,13 +33,11 @@ public class AppDao {
                 ps.setInt(10, app.getDts());
                 ps.setString(11, app.getCname());
                 ps.setString(12, app.getIcon());
-                ps.setString(13, app.getIcon_name());
-                ps.setString(14, app.getImc());
-                ps.setString(15, app.getImc_name());
-                ps.setString(16, app.getSc());
-                ps.setString(17, app.getDirect_number());
-                ps.setString(18, now);
-                ps.setString(19, now);
+                ps.setString(13, app.getImc());
+                ps.setString(14, app.getSc());
+                ps.setString(15, app.getDirect_number());
+                ps.setString(16, now);
+                ps.setString(17, now);
 
                 ps.executeUpdate();
             }

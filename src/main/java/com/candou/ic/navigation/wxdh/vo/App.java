@@ -15,10 +15,8 @@ public class App {
     private int cid;
     private String cname = "";// 分类名称
     private String icon = "";// icon地址
-    private String icon_name;
     private List<Photo> photos;// icon地址
     private String imc = "";// 二维码地址
-    private String imc_name;//二维码名称
     private String sc = "";
     private String direct_number = "";// 关注人数
 
@@ -26,14 +24,6 @@ public class App {
     private String updated_at;
 
 
-
-    public String getIcon_name() {
-        return icon_name;
-    }
-
-    public void setIcon_name(String icon_name) {
-        this.icon_name = icon_name;
-    }
 
     public int getId() {
         return id;
@@ -55,13 +45,6 @@ public class App {
         return f;
     }
 
-    public String getImc_name() {
-        return imc_name;
-    }
-
-    public void setImc_name(String imc_name) {
-        this.imc_name = imc_name;
-    }
 
     public String getOc() {
         return oc;
@@ -194,10 +177,12 @@ public class App {
     @Override
     public String toString() {
         return "App [id=" + id + ", name=" + name + ", intro=" + intro + ", url=" + url + ", f=" + f + ", oc=" + oc + ", wsu="
-            + wsu + ", detail=" + detail + ", dts=" + dts + ", cid=" + cid + ", cname=" + cname + ", icon=" + icon
-            + ", icon_name=" + icon_name + ", photos=" + photos + ", imc=" + imc + ", imc_name=" + imc_name + ", sc=" + sc
-            + ", direct_number=" + direct_number + ", created_at=" + created_at + ", updated_at=" + updated_at + "]";
+            + wsu + ", detail=" + detail + ", dts=" + dts + ", cid=" + cid + ", cname=" + cname + ", icon=" + icon + ", photos="
+            + photos + ", imc=" + imc + ", sc=" + sc + ", direct_number=" + direct_number + ", created_at=" + created_at
+            + ", updated_at=" + updated_at + "]";
     }
+
+
 
 
 
