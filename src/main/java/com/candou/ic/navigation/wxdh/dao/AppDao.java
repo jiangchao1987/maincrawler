@@ -29,8 +29,8 @@ public class AppDao {
                 ps.setString(6, app.getOc());
                 ps.setString(7,app.getWsu());
                 ps.setString(8, app.getDetail());
-                ps.setInt(9, app.getCid());
-                ps.setInt(10, app.getDts());
+                ps.setInt(9, app.getDts());
+                ps.setInt(10, app.getCid());
                 ps.setString(11, app.getCname());
                 ps.setString(12, app.getIcon());
                 ps.setString(13, app.getIcon_name());
