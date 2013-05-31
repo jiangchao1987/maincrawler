@@ -12,10 +12,11 @@ public class Job {
     private  String oc = "";
     private int cid;
     private  String cname = "";// 分类名称
-    private  String icon = "";// icon地址
-    private String icon_name;//icon名称
     private  String direct_number = "";// 关注人数
     private  int is_matched ;
+
+    private String created_at;
+    private String updated_at;
     public int getId() {
         return id;
     }
@@ -39,9 +40,6 @@ public class Job {
     }
     public String getCname() {
         return cname;
-    }
-    public String getIcon() {
-        return icon;
     }
     public String getDirect_number() {
         return direct_number;
@@ -70,16 +68,6 @@ public class Job {
     public void setCname(String cname) {
         this.cname = cname;
     }
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getIcon_name() {
-        return icon_name;
-    }
-    public void setIcon_name(String icon_name) {
-        this.icon_name = icon_name;
-    }
     public void setDirect_number(String direct_number) {
         this.direct_number = direct_number;
     }
@@ -89,12 +77,28 @@ public class Job {
     public void setIs_matched(int is_matched) {
         this.is_matched = is_matched;
     }
+
+
+    public String getCreated_at() {
+        return created_at;
+    }
+    public String getUpdated_at() {
+        return updated_at;
+    }
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+    public void setUpdated_at(String updated_at) {
+        this.updated_at = updated_at;
+    }
     @Override
     public String toString() {
         return "Job [id=" + id + ", name=" + name + ", intro=" + intro + ", url=" + url + ", f=" + f + ", oc=" + oc + ", cid="
-            + cid + ", cname=" + cname + ", icon=" + icon + ", direct_number=" + direct_number + ", is_matched=" + is_matched
-            + "]";
+            + cid + ", cname=" + cname + ", direct_number=" + direct_number + ", is_matched=" + is_matched + ", created_at="
+            + created_at + ", updated_at=" + updated_at + "]";
     }
+
+
 
 
 

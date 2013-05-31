@@ -4,6 +4,7 @@ public class Category {
 
     private int cid;
     private String cname="";//分类名称
+    private String curl;
     public int getCid() {
         return cid;
     }
@@ -16,9 +17,17 @@ public class Category {
     public void setCname(String cname) {
         this.cname = cname;
     }
+
+
+    public String getCurl() {
+        return curl;
+    }
+    public void setCurl(String curl) {
+        this.curl = curl;
+    }
     @Override
     public String toString() {
-        return "Category [cid=" + cid + ", cname=" + cname + "]";
+        return "Category [cid=" + cid + ", cname=" + cname + ", curl=" + curl + "]";
     }
 
 

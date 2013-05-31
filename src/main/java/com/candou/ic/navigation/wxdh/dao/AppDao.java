@@ -27,7 +27,6 @@ public class AppDao {
 
             for (App app : apps) {
                 String now = DateTimeUtil.nowDateTime();
-                log.info(app);
 
                 ps.setInt(1, app.getId());
                 ps.setString(2, app.getName());

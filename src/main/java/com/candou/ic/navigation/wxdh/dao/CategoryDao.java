@@ -39,4 +39,26 @@ public class CategoryDao {
         return apps;
     }
 
+
+    public static void addBatchCategory(List<Category> categories) {
+        try {
+            Connection connection = Database.getConnection();
+            java.sql.PreparedStatement ps = connection.prepareStatement("insert ignore into wxdh_category (cid, cname) VALUES (?, ?)");
+
+            for (Category category : categories) {
+                ps.setInt(1, category.getCid());
+                ps.setString(2, category.getCname());
+
+                ps.addBatch();
+            }
+            ps.executeBatch();
+            ps.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+    }
+
 }

@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import com.candou.db.Database;
 import com.candou.ic.navigation.wxdh.vo.Photo;
+import com.candou.util.DateTimeUtil;
 
 public class PhotoDao {
 	private static Logger log = Logger.getLogger(PhotoDao.class);
@@ -17,14 +18,17 @@ public class PhotoDao {
         try {
             Connection connection = Database.getConnection();
             //insert ignore into  自动检查珠主键是否重复
-            PreparedStatement ps = connection.prepareStatement("insert ignore into wxdh_photo (appid, photo_url,type) VALUES (?, ?, ?)");
+            PreparedStatement ps = connection.prepareStatement("insert ignore into wxdh_photo (appid, photo_url,type,created_at, updated_at) VALUES (?, ?, ?, ?, ?)");
 
             for (Photo photo : photos) {
+                String now = DateTimeUtil.nowDateTime();
                 log.info(photo);
 
                 ps.setInt(1, photo.getAppid());
                 ps.setString(2, photo.getPhoto_url());
                 ps.setInt(3, photo.getType());
+                ps.setString(4, now);
+                ps.setString(5, now);
                 ps.executeUpdate();
             }
 
@@ -36,19 +40,5 @@ public class PhotoDao {
         }
     }
 
-    public static void UpdatePhotoNames(Photo photo) {
-        try {
-            Connection connection = Database.getConnection();
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("update wxdh_photo set filename=? where pid=?");
 
-            preparedStatement.setString(1, photo.getFilename());
-            preparedStatement.setInt(2, photo.getId());
-            preparedStatement.execute();
-            connection.close();
-
-        } catch (SQLException e) {
-            log.error(e.getMessage());
-        }
-    }
 }
