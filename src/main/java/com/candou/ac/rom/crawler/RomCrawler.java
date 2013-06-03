@@ -41,17 +41,20 @@ public class RomCrawler {
     private static String xpathRomType = "//div[@class='rom_de_jie']/ul/li[5]";
     private static String xpathStar = "//span[@class='star_hui fl']/b[@class='star_7']";
     private static String xpathDescription = "//div[@id='wenzi']";
-    private static String xpathIconUrl = "//div[@class='rom_picture']/img";
+    private static String xpathIconUrl = "//div[@class='rom_picture']/img";//img[@class="itemImage"]/@src    也可以根据img本身的calss属性获取
     private static String xpathPhotos = "//div[@class='container_hover']/div[@class='pics'][*]/a/img";
     private static String xpathDownloadUrl = "//div[@class='rom_button']/a";
     private static String xpathCategory = "//div[@class='rom_head']/span[1]/a[4]";
     private static String xpathCompany = "//div[@class='rom_head']/span[1]/a[3]";
     private int counter = 0;
+    private int count=0;
 
     public void start() {
         int page = 1;
-
         while (true) {
+        	count++;
+          	log.info("正在处理第:"+count+"页---------------------------------");
+        	
             List<RomPhoto> photos = new ArrayList<RomPhoto>();
             
             String pageUrl = "http://www.shendu.com/android/rom-cid-0-page-" + page++ + "-order-time.html";
@@ -66,9 +69,11 @@ public class RomCrawler {
             	}
             	
             	counter++;
+            	
                 continue;
             }
             counter = 0;
+          
             
             List<RomJob> jobs = getJobs(htmlSource);
 
@@ -468,6 +473,10 @@ public class RomCrawler {
     	System.out.println(getRedirectDownloadURL("http://www.shendu.com/?c=download&a=index&source=rom&id=387"));
 	}
     
+    /**
+     * @param downloadURL  下载地址
+     * @return  转向后的地址
+     */
     public static String getRedirectDownloadURL(String downloadURL) {
         String redirectDownloadURL = null;
         DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -475,15 +484,13 @@ public class RomCrawler {
         params.setParameter(ClientPNames.HANDLE_REDIRECTS, false); // 关闭GET 重定向
         HttpConnectionParams.setConnectionTimeout(params, 30000);
         HttpConnectionParams.setSoTimeout(params, 30000);
-        httpclient
-                .setHttpRequestRetryHandler(new DefaultHttpRequestRetryHandler(
-                        3, true));
+        httpclient.setHttpRequestRetryHandler(new DefaultHttpRequestRetryHandler(3, true));
         try {
-            HttpProtocolParams.setUserAgent(httpclient.getParams(),
-                    BrowserUtil.getRandomBrowserUserAgent());
+            HttpProtocolParams.setUserAgent(httpclient.getParams(),BrowserUtil.getRandomBrowserUserAgent());
             HttpGet httpget = new HttpGet(downloadURL);
             HttpResponse response = httpclient.execute(httpget);
             int statuscode = response.getStatusLine().getStatusCode();
+            //Http statecode  为3XX，进行转向
             if ((statuscode == HttpStatus.SC_MOVED_TEMPORARILY)
                     || (statuscode == HttpStatus.SC_MOVED_PERMANENTLY)
                     || (statuscode == HttpStatus.SC_SEE_OTHER)
@@ -503,6 +510,7 @@ public class RomCrawler {
     private List<RomJob> getJobs(String htmlSource) {
         List<RomJob> jobs = new ArrayList<RomJob>();
 
+        //使用HtmlCleaner格式化html code
         HtmlCleaner cleaner = getCleaner();
         TagNode node = cleaner.clean(htmlSource);
         Object[] jobNodes = null;
@@ -513,7 +521,6 @@ public class RomCrawler {
         catch (XPatherException e) {
             e.printStackTrace();
         }
-
         if (jobNodes != null && jobNodes.length > 0) {
             for (int index = 0; index < jobNodes.length; index++) {
                 TagNode tNode = (TagNode) jobNodes[index];
@@ -521,7 +528,8 @@ public class RomCrawler {
                 String name = tNode.getText().toString().trim();
                 String url = tNode.getAttributeByName("href").trim();
                 int jobId = Integer.parseInt(url.substring(url.indexOf("/rom-") + 5, url.indexOf(".html")));
-
+                System.out.println("name:------"+name);
+                System.out.println("url :------"+url);
                 RomJob job = new RomJob();
                 job.setJobId(jobId);
                 job.setName(name);
@@ -549,6 +557,10 @@ public class RomCrawler {
         return localPhotos;
     }
 
+    /**
+     * @param url httpUrl
+     * @return 页面内容(html code)
+     */
     public String getHtmlContent(String url) {
         int retryCounter = 0;
         String htmlSource = null;

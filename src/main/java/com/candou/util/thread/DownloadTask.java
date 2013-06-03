@@ -106,10 +106,13 @@ public class DownloadTask {
 		HttpClient httpClient = new DefaultHttpClient();
 		try {
 			//获取下载文件信息
+			System.out.println("获取下载文件信息");
 			getDownloadFileInfo(httpClient);
 			//启动多个下载线程
+			System.out.println("启动多个下载线程");
 			startDownloadThread();
 			//开始监视下载数据
+			System.out.println("开始监视下载数据");
 			monitor();
 		} catch (Exception e) {
 			throw e;
@@ -127,6 +130,7 @@ public class DownloadTask {
 		HttpResponse response = httpClient.execute(httpHead);
 		//获取HTTP状态码
 		int statusCode = response.getStatusLine().getStatusCode();
+		System.out.println("statusCode------"+statusCode);
 
 		if(statusCode != 200) throw new Exception("资源不存在!");
 		if(getDebug()){
@@ -139,6 +143,7 @@ public class DownloadTask {
 		Header[] headers = response.getHeaders("Content-Length");
 		if(headers.length > 0)
 			contentLength = Long.valueOf(headers[0].getValue());
+			System.out.println("资源长度contentLength:------"+contentLength);
 		//Accept-Ranges
 //		headers = response.getHeaders("Accept-Ranges");
 //		if(headers.length > 0)
@@ -172,6 +177,7 @@ public class DownloadTask {
 		raf.close();
 		
 		//定义下载线程事件实现类
+		System.out.println("定义下载线程事件实现类");
 		DownloadThreadListener listener = new DownloadThreadListener() {
 			public void afterPerDown(DownloadThreadEvent event) {
 				//下载完一个片段后追加已下载字节数
@@ -191,6 +197,7 @@ public class DownloadTask {
 		
 		//不支持多线程下载时
 		if (!acceptRanges) {
+			System.out.println("不支持多线程下载时");
 			if(getDebug()){
 				System.out.println("该地址不支持多线程下载");
 			}
@@ -208,6 +215,7 @@ public class DownloadTask {
 		long endPosition = perThreadLength;
 		//循环创建多个下载线程
 		do{
+			System.out.println("循环创建多个下载线程");
 			if(endPosition > contentLength)
 				endPosition = contentLength;
 
@@ -245,6 +253,7 @@ public class DownloadTask {
 	 * 计算进度信息并触发事件
 	 */
 	private void showInfo(boolean complete) {
+		//System.out.println("计算进度信息并触发事件");
 		long currentTime = System.currentTimeMillis();
 		double realTimeSpeed = (receivedCount - lastCount) * 1.0 / ((currentTime - endTime) / 1000.0);
 		double globalSpeed = receivedCount * 1.0 / ((currentTime - beginTime) / 1000.0);

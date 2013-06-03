@@ -10,11 +10,11 @@ import org.apache.log4j.Logger;
 
 public class URLFetchUtil {
 	private static Logger logger = Logger.getLogger(URLFetchUtil.class);
-	
+
 	public static String fetchGet(String url) {
 		return fetch(url, "GET");
 	}
-	
+
 	public static String fetchPost(String url) {
 		return fetch(url, "POST");
 	}
@@ -49,7 +49,7 @@ public class URLFetchUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 			logger.error("Error: " + e.getMessage());
-			
+
 			try {
                 logger.info("sleep 30s ...");
                 Thread.sleep(30000);
