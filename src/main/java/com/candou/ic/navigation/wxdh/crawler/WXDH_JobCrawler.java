@@ -54,6 +54,7 @@ public class WXDH_JobCrawler {
                 String htmlSource = null;
                 do {
                     htmlSource = URLFetchUtil.fetchGet(pageUrl);
+                    log.info(htmlSource);
                     retryCounter++;
                     if (retryCounter > 1) {
                         log.info("retry connection: " + pageUrl);
