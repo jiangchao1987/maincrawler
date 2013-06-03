@@ -54,7 +54,8 @@ public class JobDao {
         try {
             Connection connection = Database.getConnection();
             Statement st = connection.createStatement();
-            ResultSet resultSet = st.executeQuery("select * from jcwx_job where is_matched = 0 limit 100");
+            ResultSet resultSet = st
+                .executeQuery("select * from jcwx_job where is_matched = 0 limit 100");
 
             while (resultSet.next()) {
                 Job job = new Job();
@@ -79,7 +80,8 @@ public class JobDao {
     public static void batchUpdateMatchedStatus(List<Job> jobs) {
         try {
             Connection connection = Database.getConnection();
-            PreparedStatement ps = connection.prepareStatement("update jcwx_job set is_matched = 1 where job_id = ?");
+            PreparedStatement ps = connection
+                .prepareStatement("update jcwx_job set is_matched = 1 where job_id = ?");
 
             for (Job job : jobs) {
                 ps.setInt(1, job.getId());
@@ -97,7 +99,8 @@ public class JobDao {
     public static void batchUpdateFailedStatus(List<Job> jobs) {
         try {
             Connection connection = Database.getConnection();
-            PreparedStatement ps = connection.prepareStatement("update jcwx_job set is_matched = -1 where job_id = ?");
+            PreparedStatement ps = connection
+                .prepareStatement("update jcwx_job set is_matched = -1 where job_id = ?");
 
             for (Job job : jobs) {
                 ps.setInt(1, job.getId());
@@ -110,6 +113,28 @@ public class JobDao {
             e.printStackTrace();
             log.error(e.getMessage());
         }
+    }
+
+    public static boolean isExist(int id) {
+        boolean flag = false;
+        String sql = "select * from jcwx_job where job_id=?";
+        try {
+            Connection connection = Database.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                flag = true;
+            }
+
+            ps.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+        return flag;
     }
 
 }
