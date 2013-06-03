@@ -74,6 +74,10 @@ public class JCWX_JobCrawler {
                 for (int index = 0; index < size; index++) {
                     JsonNode appNode = appNodeList.get(index);
 
+                    if(JobDao.isExist(Integer.parseInt(appNode.get("id").asText()))){
+                        continue;
+                    }
+
                     Job job = new Job();
                     job.setId(Integer.parseInt(appNode.get("id").asText()));
                     job.setTitle(appNode.get("thumbnail").asText());
