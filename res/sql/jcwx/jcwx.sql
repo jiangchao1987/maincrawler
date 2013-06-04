@@ -45,7 +45,7 @@ CREATE TABLE `jcwx_like` (
   KEY `updated_at` (`updated_at`),
   KEY `like_id` (`like_id`),
   KEY `article_id` (`article_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=469 DEFAULT CHARSET=utf8
+) ENGINE=MyISAM AUTO_INCREMENT=469 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `jcwx_job` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
