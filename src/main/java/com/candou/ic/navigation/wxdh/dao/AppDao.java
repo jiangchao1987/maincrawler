@@ -2,6 +2,7 @@ package com.candou.ic.navigation.wxdh.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -47,6 +48,34 @@ public class AppDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 判断app是否已经存在
+     * @param applicationId   app ID
+     * @return
+     */
+    public static boolean exists(int applicationId) {
+        Connection connection = null;
+        boolean flag = false;
+        String sql_findApp = "select * from wxdh_app where id = ?";
+        try {
+            connection = Database.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql_findApp);
+            ps.setInt(1, applicationId);
+
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                flag = true;
+            }
+            resultSet.close();
+            ps.close();
+            connection.close();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return flag;
     }
 
 

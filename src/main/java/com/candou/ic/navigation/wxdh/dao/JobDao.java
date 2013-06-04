@@ -18,6 +18,10 @@ public class JobDao {
     private static Logger log = Logger.getLogger(JobDao.class);
     private static String table_Name = "wxdh_job";
 
+    /**
+     * 添加job
+     * @param apps
+     */
     public static void addJob(List<Job> apps) {
         try {
             Connection connection = Database.getConnection();
@@ -51,6 +55,10 @@ public class JobDao {
         }
     }
 
+    /**
+     * 获取未更新的job
+     * @return
+     */
     public static List<Job> findJobs() {
         List<Job> jobs = new ArrayList<Job>();
         try {
@@ -77,6 +85,10 @@ public class JobDao {
         return jobs;
     }
 
+    /**
+     * 更新已抓取的job(is_matched)
+     * @param jobs
+     */
     public static void batchUpdateMatchedStatus(List<Job> jobs) {
         try {
             Connection connection = Database.getConnection();
@@ -112,6 +124,34 @@ public class JobDao {
             e.printStackTrace();
             log.error(e.getMessage());
         }
+    }
+
+    /**
+     * 判断job是否已经存在
+     * @param sourceJob
+     * @return
+     */
+    public static boolean exists(Job sourceJob) {
+        Connection connection = null;
+        boolean flag = false;
+        String sql_job = "select * from wxdh_job where id = ?";
+        try {
+            connection = Database.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql_job);
+            ps.setInt(1, sourceJob.getId());
+
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                flag = true;
+            }
+            resultSet.close();
+            ps.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+        return flag;
     }
 
 }
