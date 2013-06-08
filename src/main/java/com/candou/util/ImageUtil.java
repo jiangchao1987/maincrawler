@@ -21,8 +21,7 @@ public class ImageUtil {
 
     public static String getDirName(String imageUrl) {
         String md5 = MD5Util.getStringMD5(imageUrl);
-        return File.separator
-                + md5.substring(0, 2).concat(File.separator).concat(md5.substring(2, 4)).concat(File.separator);
+        return File.separator + md5.substring(0, 2).concat(File.separator).concat(md5.substring(2, 4)).concat(File.separator);
     }
 
     public static void remoteImage(String url, File target) {
@@ -30,17 +29,14 @@ public class ImageUtil {
 
         try {
             URL request = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) request
-                    .openConnection();
+            HttpURLConnection connection = (HttpURLConnection) request.openConnection();
 
             HttpURLConnection.setFollowRedirects(true);
             connection.setConnectTimeout(30000);
             connection.setReadTimeout(30000);
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("User-Agent",
-                    BrowserUtil.getRandomBrowserUserAgent());
-            connection.setRequestProperty("Accept-Language",
-                    "zh-cn, zh;q=0.75, en-us;q=0.50, en;q=0.25");
+            connection.setRequestProperty("User-Agent", BrowserUtil.getRandomBrowserUserAgent());
+            connection.setRequestProperty("Accept-Language", "zh-cn, zh;q=0.75, en-us;q=0.50, en;q=0.25");
 
             InputStream is = connection.getInputStream();
 
@@ -49,8 +45,7 @@ public class ImageUtil {
                 return;
             }
             DataInputStream in = new DataInputStream(is);
-            DataOutputStream out = new DataOutputStream(new FileOutputStream(
-                    target));
+            DataOutputStream out = new DataOutputStream(new FileOutputStream(target.toString()));
             byte[] buffer = new byte[4096];
             int len = 0;
             while ((len = in.read(buffer)) != -1) {
