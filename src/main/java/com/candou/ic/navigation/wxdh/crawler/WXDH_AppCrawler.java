@@ -18,7 +18,6 @@ import com.candou.ic.navigation.wxdh.vo.Photo;
 public class WXDH_AppCrawler {
     private static Logger log = Logger.getLogger(WXDH_AppCrawler.class);
     private static int batchAddLimit = 20;
-    private static int batchAddPhotoLimit = 10;
 
     public void start() {
         List<Job> jobs = JobDao.findJobs();
@@ -39,23 +38,29 @@ public class WXDH_AppCrawler {
                 failedJobs.add(job);
                 continue;
             }
-            // image save to local BEGIN
-            List<Photo> localPhotos = photoDownloader(app.getPhotos());
-            app.setPhotos(localPhotos);
-            // icon save to local BEGIN
-            String localIconUrl = ImageDownloader.downloader(app.getIcon(), Configure.getProperty("icon_db_path"),
-                Configure.getProperty("icon_save_path"));
-            app.setIcon(localIconUrl);
+
+            // 高分辨率 ,低分辨率 save to local BEGIN
+            photos = photoDownloader_thumb_screen(app.getPhotos(), app.getWx_id());
+
+            // icon save to local BEGIN 头像
+            String localIconUrl = ImageDownloader.downloader(app.getWx_icon_url(), Configure.getProperty("icon_db_path"),
+                Configure.getProperty("icon_save_path"), app.getWx_id());
+            app.setWx_icon(localIconUrl);
             // imc save to local BEGIN 二维码
-            String localImcUrl = ImageDownloader.downloader(app.getImc(), Configure.getProperty("imc_db_path"),
-                Configure.getProperty("imc_save_path"));
-            app.setImc(localImcUrl);
+            String localImcUrl = ImageDownloader.downloader(app.getWx_qrcode_url(), Configure.getProperty("imc_db_path"),
+                Configure.getProperty("imc_save_path"), app.getWx_id());
+            app.setWx_qrcode(localImcUrl);
+
             apps.add(app);
 
             fetchedJobs.add(job);
 
             // app入库
             if (apps.size() >= batchAddLimit || appcounter >= all) {
+                if (AppDao.exists(app.getWx_displayname())) {
+                    log.info("ALREADY EXISTS!");
+                    continue;
+                }
                 AppDao.addBatchApps(apps);
                 apps.clear();
                 JobDao.batchUpdateMatchedStatus(fetchedJobs);
@@ -63,9 +68,8 @@ public class WXDH_AppCrawler {
                 log.info("batch add apps");
             }
 
-            photos.addAll(app.getPhotos());
             // photo入库
-            if (photos.size() >= batchAddPhotoLimit || appcounter >= all) {
+            if (photos.size() > 0) {
                 PhotoDao.addBatchPhotos(photos);
                 photos.clear();
                 log.info("batch add Photos");
@@ -77,19 +81,29 @@ public class WXDH_AppCrawler {
         }
     }
 
-    public static List<Photo> photoDownloader(List<Photo> remotePhotos) {
+    /**
+     * 抓取低分辨率图片
+     *
+     * @param remotePhotos
+     * @return
+     */
+    public static List<Photo> photoDownloader_thumb_screen(List<Photo> remotePhotos, String wxId) {
         List<Photo> localPhotos = new ArrayList<Photo>();
 
         for (Photo photo : remotePhotos) {
-            String localThumbnail = ImageDownloader.downloader(photo.getPhoto_url(), Configure.getProperty("photo_db_path"),
-                Configure.getProperty("photo_save_path"));
+            String localThumbnail_thumb = ImageDownloader.downloader(photo.getWx_thumb_url(),
+                Configure.getProperty("thumb_db_path"), Configure.getProperty("thumb_save_path"), wxId);
+
+            String localThumbnail_screen = ImageDownloader.downloader(photo.getWx_screen_url(),
+                Configure.getProperty("screen_db_path"), Configure.getProperty("screen_save_path"), wxId);
 
             Photo newPhoto = new Photo();
-            newPhoto.setAppid(photo.getAppid());
-            newPhoto.setId(photo.getId());
-            newPhoto.setPhoto_url(localThumbnail);
-            newPhoto.setCreated_at(photo.getCreated_at());
-            newPhoto.setUpdated_at(photo.getUpdated_at());
+            newPhoto.setWx_id(photo.getWx_id());
+            newPhoto.setWx_photo_id(photo.getWx_photo_id());
+            newPhoto.setWx_thumb(localThumbnail_thumb);
+            newPhoto.setWx_screen(localThumbnail_screen);
+
+            log.info(newPhoto);
 
             localPhotos.add(newPhoto);
         }

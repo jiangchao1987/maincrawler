@@ -18,7 +18,7 @@ public class WXDH_AppParser {
     private static ObjectMapper mapper;
     private static Logger log = Logger.getLogger(WXDH_AppParser.class);
     private static String baseUrl = "http://wx.ijinshan.com/data/info-%d.json";
-
+    //private static String baseUrl = "http://wx.ijinshan.com/data/info-925.json";
     public static App parse(Job job) {
         int retryCounter = 0;
         String htmlSource = null;
@@ -35,32 +35,41 @@ public class WXDH_AppParser {
         } while (retryCounter < retryNumber && (null == htmlSource || htmlSource.length() == 0));
 
         if (htmlSource == null || htmlSource.length() == 0) {
+            log.info("htmlSource is null!");
             return null;
         }
 
         JsonNode appNodeList2 = getNode_app(htmlSource);
 
         JsonNode appNode = appNodeList2;
+        if (appNode == null) {
+            return null;
+        }
         App app = new App();
-        app.setId(Integer.parseInt(appNode.get("id").asText()));
-        app.setName(appNode.get("n").asText());
-        app.setIntro(appNode.get("in").asText());
-        app.setUrl(appNode.get("u").asText());
-        app.setF(Integer.parseInt(appNode.get("f").asText()));
-        app.setOc(appNode.get("oc").asText());
-        app.setWsu(appNode.get("wsu").asText());
-        app.setDetail(appNode.get("di").asText());
-        app.setDts(Integer.parseInt(appNode.get("dts").asText()));
-        app.setCid(Integer.parseInt(appNode.get("cid").asText()));
-        app.setCname(appNode.get("cn").asText());
-        app.setIcon(appNode.get("i").asText());
-        app.setImc(appNode.get("imc").asText());
-        app.setSc(appNode.get("sc").asText());
-        app.setDirect_number(appNode.get("d").asText());
+        // ID忽略
+        app.setWx_id(appNode.get("id").asText().trim());
+        app.setWx_displayname(appNode.get("n").asText().trim());
+        String category_cn = appNode.get("cn").asText().trim();
+        if (category_cn.equals("明星名人")) {
+            app.setWx_category_name("名人明星");
+        }else if (category_cn.equals("其他账号")) {
+            app.setWx_category_name("其他帐号");
+        }else{
+            app.setWx_category_name(category_cn);
+        }
 
-        // 获取**低分辨率从it**图片路径photo
-        photos.addAll(extracePhotos(appNodeList2, job.getId()));
-        // 获取**高分辨率从it**图片路径photo
+        app.setWx_date(appNode.get("dts").asText().trim());
+        app.setWx_detail(appNode.get("di").asText().trim());
+        app.setWx_intro(appNode.get("in").asText().trim());
+        app.setWx_url(appNode.get("u").asText().trim());
+        app.setWx_name(appNode.get("oc").asText().trim());
+        app.setWx_views(Integer.parseInt(appNode.get("d").asText().trim()));
+
+        // 辅助字段 远端URL地址
+        app.setWx_icon_url(appNode.get("i").asText().trim());
+        app.setWx_qrcode_url(appNode.get("imc").asText().trim());
+
+        // 获取**高/低分辨率从it**图片路径photo
         photos.addAll(extracePhotos_high(appNodeList2, job.getId()));
 
         app.setPhotos(photos);
@@ -73,8 +82,13 @@ public class WXDH_AppParser {
             if (mapper == null) {
                 mapper = new ObjectMapper();
             }
+
             JsonNode root = mapper.readTree(json);
+
             JsonNode results = root.get("data");
+            if (results.size() == 0) {
+                return null;
+            }
             return results;
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -84,47 +98,35 @@ public class WXDH_AppParser {
         return null;
     }
 
-    public static List<Photo> extracePhotos(JsonNode appNode, int appId) {
-        List<Photo> photos = new ArrayList<Photo>();
-        // 注意抓取ipad应用的时候将这里改成ipadScreenshotUrls
-        // it 低分辨率
-        JsonNode systemRequirementsNode = appNode.get("it");
-        if (systemRequirementsNode == null) {
-            return photos;
-        }
-        int size = systemRequirementsNode.size();
-        if (size == 0) {
-            return photos;
-        }
-        for (int index = 0; index < size + 1 - 1; index++) {
-            String photoUrl = systemRequirementsNode.get(index).getTextValue();
-            Photo photo = new Photo();
-            photo.setAppid(appId);
-            photo.setPhoto_url(photoUrl);
-            photo.setType(0);
-            photos.add(photo);
-        }
-        return photos;
-    }
-
     public static List<Photo> extracePhotos_high(JsonNode appNode, int appId) {
         List<Photo> photos = new ArrayList<Photo>();
         // 注意抓取ipad应用的时候将这里改成ipadScreenshotUrls
-        // im 高分辨率
-        JsonNode systemRequirementsNode = appNode.get("im");
-        if (systemRequirementsNode == null) {
+        // im 高分辨率 it低分辨率
+        JsonNode systemRequirementsNode_im = appNode.get("im");
+        if (systemRequirementsNode_im == null) {
             return photos;
         }
-        int size = systemRequirementsNode.size();
-        if (size == 0) {
+        int size_im = systemRequirementsNode_im.size();
+        if (size_im == 0) {
             return photos;
         }
-        for (int index = 0; index < size + 1 - 1; index++) {
-            String photoUrl = systemRequirementsNode.get(index).getTextValue();
+
+        JsonNode systemRequirementsNode_it = appNode.get("it");
+        if (systemRequirementsNode_it == null) {
+            return photos;
+        }
+        int size_it = systemRequirementsNode_it.size();
+        if (size_it == 0) {
+            return photos;
+        }
+        for (int index = 0; index < size_im + 1 - 1; index++) {
+            String photoUrl_im = systemRequirementsNode_im.get(index).getTextValue();
+            String photoUrl_it = systemRequirementsNode_it.get(index).getTextValue();
             Photo photo = new Photo();
-            photo.setAppid(appId);
-            photo.setPhoto_url(photoUrl);
-            photo.setType(1);
+            photo.setWx_id(appId);
+            photo.setWx_screen_url(photoUrl_im);
+            photo.setWx_thumb_url(photoUrl_it);
+
             photos.add(photo);
         }
         return photos;

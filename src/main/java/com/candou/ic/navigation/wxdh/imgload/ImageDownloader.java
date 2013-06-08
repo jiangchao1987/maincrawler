@@ -11,20 +11,24 @@ import com.candou.util.ImageUtil;
 public class ImageDownloader {
     private static Logger log = Logger.getLogger(ImageDownloader.class);
 
-    public static String downloader(String imageUrl, String dbPath, String savePath) {
-        String fileName = ImageUtil.getFileName(imageUrl);
+    public static String downloader(String imageUrl, String dbPath, String savePath,String wxId) {
+        if (imageUrl == null) {
+            return null;
+        }
+        String fileName = imageUrl.substring(imageUrl.lastIndexOf("/")+1,imageUrl.indexOf("?"));
 
-        File dir = new File(savePath + ImageUtil.getDirName(imageUrl));
+        File dir = new File(savePath.concat(File.separator).concat(wxId));
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
-        File targetFile = new File(dir.getAbsolutePath() + File.separator + fileName);
+        File targetFile = new File(dir.getAbsoluteFile().toString().concat(File.separator).concat(fileName));
 
         try {
             if (!targetFile.exists()) {
                 int retry = 0;
                 do {
+                    //开始下载
                     ImageUtil.remoteImage(imageUrl, targetFile);
                 } while (++retry <= 5 && !targetFile.exists());
 
@@ -39,7 +43,9 @@ public class ImageDownloader {
             return null;
         }
 
-        return dbPath + ImageUtil.getDirName(imageUrl) + File.separator + fileName;
+        return targetFile.toString();
     }
+
+
 
 }

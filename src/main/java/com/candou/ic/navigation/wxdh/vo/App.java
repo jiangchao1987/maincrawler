@@ -3,190 +3,152 @@ package com.candou.ic.navigation.wxdh.vo;
 import java.util.List;
 
 public class App {
-    private int id;
-    private String name = ""; // 名称
-    private String intro = "";// 简介
-    private String url = ""; // 地址
-    private int f;
-    private String oc = "";
-    private String wsu;
-    private String detail = "";
-    private int dts;
-    private int cid;
-    private String cname = "";// 分类名称
-    private String icon = "";// icon地址
-    private List<Photo> photos;// icon地址
-    private String imc = "";// 二维码地址
-    private String sc = "";
-    private String direct_number = "";// 关注人数
+    private String wx_id;
+    private String wx_displayname; // 显示名称
+    private String wx_intro;// 简介
+    private String wx_url; // 关注微信跳转地址
+    private String wx_name;// 微信名称
+    private String wx_detail;// 详细
+    private String wx_category_name;// 分类名称
+    private int wx_views;// 关注人数
+    private String wx_icon;// icon头像本地保存地址
+    private String wx_date; // 微信加入列表时间
+    private String wx_status;// 状态
+    private String wx_qrcode;// imc二维码本地保存地址
 
-    private String created_at;
-    private String updated_at;
+    // 辅助字段
 
+    private String wx_icon_url; // icon远程地址
+    private String wx_qrcode_url;// imc远程地址
 
+    private List<Photo> photos;// 缩略图
 
-    public int getId() {
-        return id;
+    public String getWx_id() {
+        return wx_id;
     }
 
-    public String getName() {
-        return name;
+    public String getWx_displayname() {
+        return wx_displayname;
     }
 
-    public String getIntro() {
-        return intro;
+    public String getWx_intro() {
+        return wx_intro;
     }
 
-    public String getUrl() {
-        return url;
+    public String getWx_url() {
+        return wx_url;
     }
 
-    public int getF() {
-        return f;
+    public String getWx_name() {
+        return wx_name;
     }
 
-
-    public String getOc() {
-        return oc;
+    public String getWx_detail() {
+        return wx_detail;
     }
 
-    public String getDetail() {
-        return detail;
+    public String getWx_category_name() {
+        return wx_category_name;
     }
 
-    public int getCid() {
-        return cid;
+    public int getWx_views() {
+        return wx_views;
     }
 
-    public String getCname() {
-        return cname;
+    public String getWx_icon() {
+        return wx_icon;
     }
 
-    public String getImc() {
-        return imc;
+    public String getWx_date() {
+        return wx_date;
     }
 
-
-    public String getSc() {
-        return sc;
+    public String getWx_status() {
+        return wx_status;
     }
 
-    public String getDirect_number() {
-        return direct_number;
+    public String getWx_qrcode() {
+        return wx_qrcode;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getWx_icon_url() {
+        return wx_icon_url;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setIntro(String intro) {
-        this.intro = intro;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public void setF(int f) {
-        this.f = f;
-    }
-
-    public void setOc(String oc) {
-        this.oc = oc;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
-
-    public void setCid(int cid) {
-        this.cid = cid;
-    }
-
-    public void setCname(String cname) {
-        this.cname = cname;
-    }
-
-    public void setImc(String imc) {
-        this.imc = imc;
-    }
-
-
-    public void setSc(String sc) {
-        this.sc = sc;
-    }
-
-    public void setDirect_number(String direct_number) {
-        this.direct_number = direct_number;
+    public String getWx_qrcode_url() {
+        return wx_qrcode_url;
     }
 
     public List<Photo> getPhotos() {
         return photos;
     }
 
+    public void setWx_id(String wx_id) {
+        this.wx_id = wx_id;
+    }
+
+    public void setWx_displayname(String wx_displayname) {
+        this.wx_displayname = wx_displayname;
+    }
+
+    public void setWx_intro(String wx_intro) {
+        this.wx_intro = wx_intro;
+    }
+
+    public void setWx_url(String wx_url) {
+        this.wx_url = wx_url;
+    }
+
+    public void setWx_name(String wx_name) {
+        this.wx_name = wx_name;
+    }
+
+    public void setWx_detail(String wx_detail) {
+        this.wx_detail = wx_detail;
+    }
+
+    public void setWx_category_name(String wx_category_name) {
+        this.wx_category_name = wx_category_name;
+    }
+
+    public void setWx_views(int wx_views) {
+        this.wx_views = wx_views;
+    }
+
+    public void setWx_icon(String wx_icon) {
+        this.wx_icon = wx_icon;
+    }
+
+    public void setWx_date(String wx_date) {
+        this.wx_date = wx_date;
+    }
+
+    public void setWx_status(String wx_status) {
+        this.wx_status = wx_status;
+    }
+
+    public void setWx_qrcode(String wx_qrcode) {
+        this.wx_qrcode = wx_qrcode;
+    }
+
+    public void setWx_icon_url(String wx_icon_url) {
+        this.wx_icon_url = wx_icon_url;
+    }
+
+    public void setWx_qrcode_url(String wx_qrcode_url) {
+        this.wx_qrcode_url = wx_qrcode_url;
+    }
+
     public void setPhotos(List<Photo> photos) {
         this.photos = photos;
     }
 
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public int getDts() {
-        return dts;
-    }
-
-    public void setDts(int dts) {
-        this.dts = dts;
-    }
-
-    public String getWsu() {
-        return wsu;
-    }
-
-    public void setWsu(String wsu) {
-        this.wsu = wsu;
-    }
-
-
-
-    public String getCreated_at() {
-        return created_at;
-    }
-
-    public String getUpdated_at() {
-        return updated_at;
-    }
-
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
-    }
-
-    public void setUpdated_at(String updated_at) {
-        this.updated_at = updated_at;
-    }
-
     @Override
     public String toString() {
-        return "App [id=" + id + ", name=" + name + ", intro=" + intro + ", url=" + url + ", f=" + f + ", oc=" + oc + ", wsu="
-            + wsu + ", detail=" + detail + ", dts=" + dts + ", cid=" + cid + ", cname=" + cname + ", icon=" + icon + ", photos="
-            + photos + ", imc=" + imc + ", sc=" + sc + ", direct_number=" + direct_number + ", created_at=" + created_at
-            + ", updated_at=" + updated_at + "]";
+        return "App [wx_id=" + wx_id + ", wx_displayname=" + wx_displayname + ", wx_intro=" + wx_intro + ", wx_url=" + wx_url
+            + ", wx_name=" + wx_name + ", wx_detail=" + wx_detail + ", wx_category_name=" + wx_category_name + ", wx_views="
+            + wx_views + ", wx_icon=" + wx_icon + ", wx_date=" + wx_date + ", wx_status=" + wx_status + ", wx_qrcode="
+            + wx_qrcode + ", wx_icon_url=" + wx_icon_url + ", wx_qrcode_url=" + wx_qrcode_url + ", photos=" + photos + "]";
     }
-
-
-
-
-
-
-
 
 }

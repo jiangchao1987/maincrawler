@@ -9,36 +9,36 @@ import org.apache.log4j.Logger;
 
 import com.candou.db.Database;
 import com.candou.ic.navigation.wxdh.vo.Photo;
-import com.candou.util.DateTimeUtil;
 
 public class PhotoDao {
-	private static Logger log = Logger.getLogger(PhotoDao.class);
+    private static Logger log = Logger.getLogger(PhotoDao.class);
 
     public static void addBatchPhotos(List<Photo> photos) {
+        Connection connection = Database.getConnection();
         try {
-            Connection connection = Database.getConnection();
-            //insert ignore into  自动检查珠主键是否重复
-            PreparedStatement ps = connection.prepareStatement("insert ignore into wxdh_photo (appid, photo_url,type,created_at, updated_at) VALUES (?, ?, ?, ?, ?)");
+            // insert ignore into 自动检查珠主键是否重复
+            PreparedStatement ps = connection
+                .prepareStatement("insert ignore into wx_photo (wx_id, wx_screen,wx_thumb) VALUES (?, ?, ?)");
 
             for (Photo photo : photos) {
-                String now = DateTimeUtil.nowDateTime();
                 log.info(photo);
 
-                ps.setInt(1, photo.getAppid());
-                ps.setString(2, photo.getPhoto_url());
-                ps.setInt(3, photo.getType());
-                ps.setString(4, now);
-                ps.setString(5, now);
+                ps.setInt(1, photo.getWx_id());
+                ps.setString(2, photo.getWx_screen());
+                ps.setString(3, photo.getWx_thumb());
                 ps.executeUpdate();
             }
 
             ps.close();
-            connection.close();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-
 
 }

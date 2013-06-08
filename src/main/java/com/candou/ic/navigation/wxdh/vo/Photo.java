@@ -1,81 +1,67 @@
 package com.candou.ic.navigation.wxdh.vo;
 
 public class Photo {
-    private int id;
-    private int appid;
-    private String photo_url = "";
-    private String filename;
-    private int type;
+    private int wx_photo_id;
+    private int wx_id;
+    private String wx_screen;//高分辨率  大图
+    private String wx_thumb;//缩略图  低分辨率
 
-    private String created_at;
-    private String updated_at;
+    // 辅助字段
+    private String wx_screen_url;
+    private String wx_thumb_url;
 
-    public int getAppid() {
-        return appid;
+    public int getWx_photo_id() {
+        return wx_photo_id;
     }
 
-    public String getPhoto_url() {
-        return photo_url;
+    public int getWx_id() {
+        return wx_id;
     }
 
-    public void setAppid(int appid) {
-        this.appid = appid;
+    public String getWx_screen() {
+        return wx_screen;
     }
 
-    public void setPhoto_url(String photo_url) {
-        this.photo_url = photo_url;
+    public String getWx_thumb() {
+        return wx_thumb;
     }
 
-    public int getType() {
-        return type;
+    public void setWx_photo_id(int wx_photo_id) {
+        this.wx_photo_id = wx_photo_id;
     }
 
-    public int getId() {
-        return id;
+    public void setWx_id(int wx_id) {
+        this.wx_id = wx_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setWx_screen(String wx_screen) {
+        this.wx_screen = wx_screen;
     }
 
-    public String getFilename() {
-        return filename;
+    public void setWx_thumb(String wx_thumb) {
+        this.wx_thumb = wx_thumb;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public String getWx_screen_url() {
+        return wx_screen_url;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public String getWx_thumb_url() {
+        return wx_thumb_url;
     }
 
-
-
-    public String getCreated_at() {
-        return created_at;
+    public void setWx_screen_url(String wx_screen_url) {
+        this.wx_screen_url = wx_screen_url;
     }
 
-    public String getUpdated_at() {
-        return updated_at;
-    }
-
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
-    }
-
-    public void setUpdated_at(String updated_at) {
-        this.updated_at = updated_at;
+    public void setWx_thumb_url(String wx_thumb_url) {
+        this.wx_thumb_url = wx_thumb_url;
     }
 
     @Override
     public String toString() {
-        return "Photo [id=" + id + ", appid=" + appid + ", photo_url=" + photo_url + ", filename=" + filename + ", type=" + type
-            + ", created_at=" + created_at + ", updated_at=" + updated_at + "]";
+        return "Photo [wx_photo_id=" + wx_photo_id + ", wx_id=" + wx_id + ", wx_screen=" + wx_screen + ", wx_thumb=" + wx_thumb
+            + ", wx_screen_url=" + wx_screen_url + ", wx_thumb_url=" + wx_thumb_url + "]";
     }
-
-
-
-
 
 }

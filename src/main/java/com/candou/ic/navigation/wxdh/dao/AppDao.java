@@ -11,58 +11,78 @@ import com.candou.ic.navigation.wxdh.vo.App;
 import com.candou.util.DateTimeUtil;
 
 public class AppDao {
-    private static String table_Name = "wxdh_app";
+    private static String table_Name = "wx_member";
 
     public static void addBatchApps(List<App> apps) {
+        Connection connection = Database.getConnection();
         try {
-            Connection connection = Database.getConnection();
+
             PreparedStatement ps = connection
-                .prepareStatement("insert ignore into "+table_Name+" (id, name, intro, url, f, oc, wsu, detail, dts, cid, cname, icon,  imc, sc,direct_number,created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                .prepareStatement("insert ignore into "
+                    + table_Name
+                    + " (wx_displayname,wx_intro,wx_url,wx_name,wx_detail,wx_category,wx_views,wx_icon,wx_date,wx_qrcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             for (App app : apps) {
-                String now = DateTimeUtil.nowDateTime();
 
-                ps.setInt(1, app.getId());
-                ps.setString(2, app.getName());
-                ps.setString(3, app.getIntro());
-                ps.setString(4, app.getUrl());
-                ps.setInt(5, app.getF());
-                ps.setString(6, app.getOc());
-                ps.setString(7,app.getWsu());
-                ps.setString(8, app.getDetail());
-                ps.setInt(9, app.getDts());
-                ps.setInt(10, app.getCid());
-                ps.setString(11, app.getCname());
-                ps.setString(12, app.getIcon());
-                ps.setString(13, app.getImc());
-                ps.setString(14, app.getSc());
-                ps.setString(15, app.getDirect_number());
-                ps.setString(16, now);
-                ps.setString(17, now);
+                ps.setString(1, app.getWx_displayname());
+                ps.setString(2, app.getWx_intro());
+                ps.setString(3, app.getWx_url());
+                ps.setString(4, app.getWx_name());
+                ps.setString(5, app.getWx_detail());
+                ps.setString(6, app.getWx_category_name());
+                ps.setInt(7, app.getWx_views());
+                ps.setString(8, app.getWx_icon());
+                String date_dts = app.getWx_date();// 时间戳
+                String date = "";
+                if (date_dts != null && date_dts.length() != 0) {
+                    date = DateTimeUtil.getDate(date_dts);
+                    if (date != null && date.length() != 0) {
+                        ps.setString(9, date);
+                    }
+                } else {
+                    // 插入当前时间
+                    ps.setString(9, DateTimeUtil.nowDateTime());
+                }
 
-                ps.executeUpdate();
+                ps.setString(10, app.getWx_qrcode());
+
+                try {
+                    int result = ps.executeUpdate();
+                    System.out.println(result);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
 
             ps.close();
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     /**
      * 判断app是否已经存在
-     * @param applicationId   app ID
+     *
+     * @param applicationId
+     *            app ID
      * @return
      */
-    public static boolean exists(int applicationId) {
+    public static boolean exists(String displayname) {
         Connection connection = null;
         boolean flag = false;
-        String sql_findApp = "select * from wxdh_app where id = ?";
+        String sql_findApp = "select * from " + table_Name + " where wx_displayname = ?";
         try {
             connection = Database.getConnection();
             PreparedStatement ps = connection.prepareStatement(sql_findApp);
-            ps.setInt(1, applicationId);
+            ps.setString(1, displayname);
 
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
@@ -70,15 +90,17 @@ public class AppDao {
             }
             resultSet.close();
             ps.close();
-            connection.close();
-        }
-        catch (SQLException e) {
+
+        } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return flag;
     }
-
-
-
 
 }

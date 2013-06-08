@@ -9,7 +9,6 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.candou.ic.navigation.wxdh.dao.AppDao;
 import com.candou.ic.navigation.wxdh.dao.CategoryDao;
 import com.candou.ic.navigation.wxdh.dao.JobDao;
 import com.candou.ic.navigation.wxdh.vo.Category;
@@ -104,9 +103,9 @@ public class WXDH_JobCrawler {
                         newJobs.add(job);
                     }
 
-                    if (AppDao.exists(job.getId())) {
+                   /* if (AppDao.exists(job.getId())) {
                         matchedJobs.add(job);
-                    }
+                    }*/
                 }
                 //新job,入库
                 if (newJobs.size() > 0) {
