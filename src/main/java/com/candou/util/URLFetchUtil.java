@@ -5,7 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
+import java.util.Set;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
 public class URLFetchUtil {
@@ -59,5 +66,26 @@ public class URLFetchUtil {
 		}
 		return content;
 	}
+
+	public static String fetchPost(String url, HttpEntity httpEntity, Map<String, String> headers) {
+	    String content = null;
+        DefaultHttpClient httpclient = new DefaultHttpClient();
+        try {
+            HttpPost httpPost = new HttpPost(url);
+            Set<String> keys = headers.keySet();
+            for (String key : keys) {
+                httpPost.addHeader(key, headers.get(key));
+            }
+            httpPost.setEntity(httpEntity);
+            HttpResponse response = httpclient.execute(httpPost);
+            HttpEntity respEntity = response.getEntity();
+            content = EntityUtils.toString(respEntity);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpclient.getConnectionManager().shutdown();
+        }
+        return content;
+    }
 
 }
