@@ -11,7 +11,7 @@ public class Job {
 	private String createdAt;
 	private String updatedAt;
 	private String version;
-	private String releaseDate;
+	private String releaseDate;//发表时间
 
 	public int getId() {
 		return id;

@@ -2,9 +2,9 @@ package com.candou.ic.market.pp.bean;
 
 public class Price {
 	private int applicationId;
-	private float currentPrice;
+	private float currentPrice;//现在的价格
 	private float lastPrice;
-	private String priceTrend;
+	private String priceTrend;//价格趋势
 
 	public Price(int applicationId, float currentPrice, float lastPrice,
 			String priceTrend) {
