@@ -3,13 +3,15 @@ package com.candou.ic.market.pp.crawler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.candou.ic.market.pp.bean.Job;
 import com.candou.ic.market.pp.dao.JobDao;
-import com.candou.util.URLFetchUtil;
+import com.candou.util.MailUtil;
+import com.candou.util.URLFetchUtil_PP;
 
 public class PPCrawler {
 	private final int retryNumber = 5;
@@ -25,15 +27,14 @@ public class PPCrawler {
 			"MusicGame", "IntelligenceGame", "RacingGame", "RoleGame", "SimulationGame", "SportsGame", "StrategyGame",
 			"SmallGame", "WordGame" };
 
-	public void start(String[] sources) {
+	public void start(int type) {
 		while (true) {
 			String htmlSource = null;
 			int retryCounter = 0;
-			for (int x = 0; x < sources.length; x++) {
-				for (int pn = 1; pn < 1000; pn++) {
+				for (int pn = 0; pn < 1000; pn++) {
 					do {
-						baseUrl = String.format(sources[x], pn);
-						htmlSource = URLFetchUtil.fetchPost(baseUrl);
+						//baseUrl = String.format(sources, pn);
+						htmlSource = URLFetchUtil_PP.fetch(type,pn);
 						retryCounter++;
 						if (retryCounter > 1) {
 							log.info("retry connection: " + baseUrl);
@@ -48,11 +49,13 @@ public class PPCrawler {
 					}
 
 					htmlSource = htmlSource.replaceAll("﻿\\{", "\\{");
+					log.info(htmlSource);
 					List<Job> list = parse(htmlSource.trim());
 
 					if (list == null || list.isEmpty()) {
 						continue;
 					}
+					//入库
 					exec(list);
 					// sleep 10 seconds
 					try {
@@ -62,7 +65,6 @@ public class PPCrawler {
 						e.printStackTrace();
 					}
 				}
-			}
 			// sleep 1 hour
 			try {
 				log.info("sleep 1 hour");
@@ -74,7 +76,8 @@ public class PPCrawler {
 	}
 
 	/**
-	 * 1、id存在，更新价格；比较version和releaseDate，如果不一致插入更新记录 2、id不存在，插入ApplicationJob
+	 * 1、id存在，更新价格；比较version和releaseDate，如果不一致插入更新记录 
+	 * 2、id不存在，插入ApplicationJob
 	 */
 	private void exec(List<Job> list) {
 		List<Job> newJobs = new ArrayList<Job>();
@@ -94,7 +97,57 @@ public class PPCrawler {
 		matchedJobs.clear();
 	}
 
+	
 	private List<Job> parse(String htmlSource) {
+		List<Job> jobs = new ArrayList<Job>();
+		try {
+			JSONObject jsonObject = new JSONObject(htmlSource);
+			JSONArray jsonArray = jsonObject.getJSONArray("content");
+			if (jsonArray == null || jsonArray.length() == 0) {
+				return null;
+			}
+			for (int i = 0; i < jsonArray.length(); i++) {
+				Job job = new Job();
+				JSONObject jsonObject2 = jsonArray.getJSONObject(i);
+				int itemid = jsonObject2.getInt("itemId");
+				String title = jsonObject2.getString("title");
+				String version = jsonObject2.getString("version");
+				int catid = jsonObject2.getInt("catId");
+				String releaseDate = jsonObject2.getString("updatetime");
+				float price = (float) (jsonObject2.getDouble("price") / 1000);
+
+				int index = 14;
+				for (int j = 0; j < categoryIds.length; j++) {
+					if (catid == categoryIds[j]) {
+						index = j;
+					}
+				}
+				String cname = categoryNames[index];
+
+				job.setId(itemid);
+				job.setName(title);
+				job.setUrl(String.format("https://itunes.apple.com/cn/app/id%d?mt=8", itemid));
+				job.setPrice(price);
+				job.setPriceCurrency("RMB");
+				job.setCategoryID(catid);
+				job.setCategoryName(cname);
+				job.setVersion(version);
+				job.setReleaseDate(releaseDate);
+
+				log.info(job);
+				jobs.add(job);
+				
+			}
+		} catch (Exception e) {
+			//发送邮件
+			MailUtil.sendMail("aifengliu@candou.com","PPMain PPCrawler",ExceptionUtils.getStackTrace(e));
+			e.printStackTrace();
+		}
+
+		return jobs;
+	}
+	
+	/*private List<Job> parse_old(String htmlSource) {
 		List<Job> jobs = new ArrayList<Job>();
 		try {
 			JSONObject jsonObject = new JSONObject(htmlSource);
@@ -139,5 +192,5 @@ public class PPCrawler {
 
 		return jobs;
 	}
-
+*/
 }

@@ -3,13 +3,15 @@ package com.candou.ic.market.pp.crawler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.candou.ic.market.pp.bean.Job;
 import com.candou.ic.market.pp.dao.JobDao;
-import com.candou.util.URLFetchUtil;
+import com.candou.util.MailUtil;
+import com.candou.util.URLFetchUtil_PP;
 
 public class FreeCrawler {
 	private final int retryNumber = 5;
@@ -25,15 +27,14 @@ public class FreeCrawler {
 			"MusicGame", "IntelligenceGame", "RacingGame", "RoleGame", "SimulationGame", "SportsGame", "StrategyGame",
 			"SmallGame", "WordGame" };
 
-	public void start(String[] sources) {
+	public void start(int type) {
 		while (true) {
 			String htmlSource = null;
 			int retryCounter = 0;
-			for (int x = 0; x < sources.length; x++) {
-				for (int pn = 1; pn < 1000; pn++) {
+				for (int pn = 0; pn < 1000; pn++) {
 					do {
-						baseUrl = String.format(sources[x], pn);
-						htmlSource = URLFetchUtil.fetchPost(baseUrl);
+						//baseUrl = String.format(sources, pn);
+						htmlSource = URLFetchUtil_PP.fetch(type,pn);
 						retryCounter++;
 						if (retryCounter > 1) {
 							log.info("retry connection: " + baseUrl);
@@ -62,12 +63,12 @@ public class FreeCrawler {
 						e.printStackTrace();
 					}
 				}
-			}
 			// sleep 1 hour
 			try {
 				log.info("sleep 1 hour");
 				Thread.sleep(60 * 60 * 1000);
 			} catch (InterruptedException e) {
+				MailUtil.sendMail("aifengliu@candou.com","PPMain FreeCrawler",ExceptionUtils.getStackTrace(e));
 				e.printStackTrace();
 			}
 		}
@@ -98,19 +99,19 @@ public class FreeCrawler {
 		List<Job> jobs = new ArrayList<Job>();
 		try {
 			JSONObject jsonObject = new JSONObject(htmlSource);
-			JSONArray jsonArray = jsonObject.getJSONArray("contentArea");
+			JSONArray jsonArray = jsonObject.getJSONArray("content");
 			if (jsonArray == null || jsonArray.length() == 0) {
 				return null;
 			}
 			for (int i = 0; i < jsonArray.length(); i++) {
 				Job job = new Job();
 				JSONObject jsonObject2 = jsonArray.getJSONObject(i);
-				int itemid = jsonObject2.getInt("itemid");
+				int itemid = jsonObject2.getInt("itemId");
 				String title = jsonObject2.getString("title");
 				String version = jsonObject2.getString("version");
-				int catid = jsonObject2.getInt("catid");
+				int catid = jsonObject2.getInt("catId");
 				String releaseDate = jsonObject2.getString("updatetime");
-				float price = (float) jsonObject2.getDouble("timeprice");
+				float price = (float) (jsonObject2.getDouble("timeprice") / 1000);
 
 				int index = 14;
 				for (int j = 0; j < categoryIds.length; j++) {
@@ -134,6 +135,8 @@ public class FreeCrawler {
 				jobs.add(job);
 			}
 		} catch (Exception e) {
+			//发送错误提示邮件
+			MailUtil.sendMail("aifengliu@candou.com","PPMain PPCrawler",ExceptionUtils.getStackTrace(e));
 			e.printStackTrace();
 		}
 
