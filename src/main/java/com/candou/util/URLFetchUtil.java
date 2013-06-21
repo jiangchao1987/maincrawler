@@ -80,6 +80,7 @@ public class URLFetchUtil {
             HttpResponse response = httpclient.execute(httpPost);
             HttpEntity respEntity = response.getEntity();
             content = EntityUtils.toString(respEntity);
+            logger.info(content);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
