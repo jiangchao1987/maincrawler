@@ -11,20 +11,6 @@ import com.candou.db.Database;
 import com.candou.ic.market.pp.bean.Price;
 import com.candou.util.DateTimeUtil;
 
-/*
- * CREATE TABLE `timeline_price` (
- `price_id` int(11) NOT NULL AUTO_INCREMENT,
- `application_id` int(11) NOT NULL,
- `current_price` float(6,2) NOT NULL,
- `last_price` float(6,2) NOT NULL,
- `price_trend` char(10) NOT NULL,
- `created_at` datetime NOT NULL,
- PRIMARY KEY (`price_id`),
- KEY `application_id` (`application_id`),
- KEY `price_trend` (`price_trend`),
- KEY `created_at` (`created_at`)
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
- */
 public class TLPriceDao {
 	private static Logger log = Logger.getLogger(TLPriceDao.class);
 

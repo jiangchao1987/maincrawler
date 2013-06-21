@@ -92,7 +92,7 @@ public class LimitedCrawler {
 		}
 		log.info(String.format("newJobs.size() : %d, matchedJobs.size(): %d", newJobs.size(), matchedJobs.size()));
 		JobDao.addBatchJobs(newJobs);
-		JobDao.batchUpdate(matchedJobs);
+//		JobDao.batchUpdate(matchedJobs);
 		addBatchLimited(matchedJobs);
 		newJobs.clear();
 		matchedJobs.clear();
@@ -135,7 +135,7 @@ public class LimitedCrawler {
 				String version = jsonObject2.getString("version");
 				int catid = jsonObject2.getInt("catId");
 				String releaseDate = jsonObject2.getString("updatetime");
-				float price = (float) (jsonObject2.getDouble("timeprice") / 1000);
+				float price = (float) (jsonObject2.getDouble("timeprice"));
 
 				int index = 14;
 				for (int j = 0; j < categoryIds.length; j++) {

@@ -113,7 +113,7 @@ public class PPCrawler {
 				String version = jsonObject2.getString("version");
 				int catid = jsonObject2.getInt("catId");
 				String releaseDate = jsonObject2.getString("updatetime");
-				float price = (float) (jsonObject2.getDouble("price") / 1000);
+				float price = (float) (jsonObject2.getDouble("price"));
 
 				int index = 14;
 				for (int j = 0; j < categoryIds.length; j++) {
@@ -146,50 +146,5 @@ public class PPCrawler {
 		return jobs;
 	}
 	
-	/*private List<Job> parse_old(String htmlSource) {
-		List<Job> jobs = new ArrayList<Job>();
-		try {
-			JSONObject jsonObject = new JSONObject(htmlSource);
-			JSONArray jsonArray = jsonObject.getJSONArray("contentArea");
-			if (jsonArray == null || jsonArray.length() == 0) {
-				return null;
-			}
-			for (int i = 0; i < jsonArray.length(); i++) {
-				Job job = new Job();
-				JSONObject jsonObject2 = jsonArray.getJSONObject(i);
-				int itemid = jsonObject2.getInt("itemid");
-				String title = jsonObject2.getString("title");
-				String version = jsonObject2.getString("version");
-				int catid = jsonObject2.getInt("catid");
-				String releaseDate = jsonObject2.getString("updatetime");
-				float price = (float) (jsonObject2.getDouble("price") / 1000);
-
-				int index = 14;
-				for (int j = 0; j < categoryIds.length; j++) {
-					if (catid == categoryIds[j]) {
-						index = j;
-					}
-				}
-				String cname = categoryNames[index];
-
-				job.setId(itemid);
-				job.setName(title);
-				job.setUrl(String.format("https://itunes.apple.com/cn/app/id%d?mt=8", itemid));
-				job.setPrice(price);
-				job.setPriceCurrency("RMB");
-				job.setCategoryID(catid);
-				job.setCategoryName(cname);
-				job.setVersion(version);
-				job.setReleaseDate(releaseDate);
-
-				log.info(job);
-				jobs.add(job);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return jobs;
-	}
-*/
+	
 }
