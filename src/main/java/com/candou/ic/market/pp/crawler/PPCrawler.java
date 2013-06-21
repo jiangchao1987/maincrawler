@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import com.candou.ic.market.pp.bean.Job;
 import com.candou.ic.market.pp.dao.JobDao;
+import com.candou.ic.market.pp.util.NotificationCenter;
 import com.candou.util.MailUtil;
 import com.candou.util.URLFetchUtil_PP;
 
@@ -33,8 +34,7 @@ public class PPCrawler {
 			int retryCounter = 0;
 				for (int pn = 0; pn < 1000; pn++) {
 					do {
-						//baseUrl = String.format(sources, pn);
-						htmlSource = URLFetchUtil_PP.fetch(type,pn);
+						htmlSource = NotificationCenter.notify(type, pn);
 						retryCounter++;
 						if (retryCounter > 1) {
 							log.info("retry connection: " + baseUrl);
