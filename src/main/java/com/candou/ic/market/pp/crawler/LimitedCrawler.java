@@ -15,7 +15,6 @@ import com.candou.ic.market.pp.bean.Job;
 import com.candou.ic.market.pp.dao.JobDao;
 import com.candou.ic.market.pp.util.NotificationCenter;
 import com.candou.util.MailUtil;
-import com.candou.util.URLFetchUtil_PP;
 
 public class LimitedCrawler {
 	private final int retryNumber = 5;
