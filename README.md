@@ -1,9 +1,11 @@
-main spider servers, contains android/iphone/ipad crawlers(爬虫)
+﻿main spider servers, contains android/iphone/ipad crawlers(爬虫)
 
 
 以下按照packagename区分
 ac(android crawler)
 	rom -- androidrom crawler, 来源http://www.shendu.com/
+                               ---RomMain 抓取rom列表页面信息,入库
+                               ---DownloadMain  根据romID和下载URL下载Rom
 ic(iphone/ipad crawler)
 	market -- 获取各个市场的iphone/ipad应用数据
 		official -- 官方排行榜，请参照
